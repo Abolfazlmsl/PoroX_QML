@@ -21,6 +21,30 @@ Window {
     height: Screen.height*0.85
     title: qsTr("PoroX")
 
+    //license properties
+    property bool isLicensed: false
+    signal showLogin()
+    signal showTrial()
+    signal showPurchase()
+
+    onShowLogin: {
+        licenseform.visible = true
+        trialform.visible = false
+        purchaseform.visible = false
+    }
+
+    onShowTrial: {
+        licenseform.visible = false
+        trialform.visible = true
+        purchaseform.visible = false
+    }
+
+    onShowPurchase: {
+        licenseform.visible = false
+        trialform.visible = false
+        purchaseform.visible = true
+    }
+
     Component.onCompleted: {
         x = Screen.width / 2 - width / 2
         y = Screen.height / 2 - height / 2
@@ -2098,6 +2122,7 @@ Window {
         PropertyAnimation { target: logPhasedefrec ; properties: "height"; to: 0 ; duration: 300 }
     }
 
+    //-- Header of main window --//
     Rectangle{
         id: header_rec
         width: parent.width
@@ -2272,6 +2297,7 @@ Window {
 
         Rectangle{
             id: softBars
+            enabled: isLicensed //Enabled by license
             width: parent.width
             height: 0
             anchors.top: header_tab.bottom
@@ -2312,6 +2338,7 @@ Window {
         }
     }
 
+    //-- Home of main window --//
     RowLayout{
         id: home
         height: parent.height - header_rec.height
@@ -4116,7 +4143,7 @@ Window {
                                 ToolTip {
                                     id: text_tooltip
                                     parent: bcRec
-                                    text: "Texts color"
+                                    text: "Text color"
                                     delay: 1
                                     font.pixelSize: Qt.application.font.pixelSize
                                 }
@@ -4579,6 +4606,37 @@ Window {
         anchors.top: parent.top
         anchors.topMargin: 10
     }
+
+    //-- License form --//
+    LicenseForm{
+        id: licenseform
+
+        visible: true
+
+        //flags: Qt.Dialog //SplashScreen //Dialog
+
+    }
+
+    //-- Trial form --//
+    TrialForm{
+        id: trialform
+
+        visible: false
+
+        //flags: Qt.Dialog //SplashScreen //Dialog
+
+    }
+
+    //-- License form --//
+    PurchaseLicenseForm{
+        id: purchaseform
+
+        visible: false
+
+        //flags: Qt.Dialog //SplashScreen //Dialog
+
+    }
+
 
     //-- 2D image setting --//
     property var image2d_filter: ApplicationWindow{

@@ -44,6 +44,8 @@ import skimage.measure as ms
 from Relperm import RelativePermeability
 from RelDiff import RelativeDiffusivity
 
+from licensing.models import *
+from licensing.methods import Key, Helpers
 
 application_path = (
     sys._MEIPASS
@@ -98,18 +100,6 @@ class Main(QObject):
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(10)
 
-        self.threadpool2 = QThreadPool()
-        self.threadpool2.setMaxThreadCount(10)
-
-        self.threadpool3 = QThreadPool()
-        self.threadpool3.setMaxThreadCount(10)
-
-        self.threadpool4 = QThreadPool()
-        self.threadpool4.setMaxThreadCount(10)
-
-        self.threadpool5 = QThreadPool()
-        self.threadpool5.setMaxThreadCount(10)
-
     newFile = Signal()
     saveFile = Signal()
     openFile = Signal(str, float, float, float, float, float, list, list, list, list, str, int,
@@ -157,6 +147,27 @@ class Main(QObject):
                             list, list, list, list, list, list, list, list, list, list, list, list, list, bool)
     time = Signal(str, str)
     percent = Signal(int)
+
+    def check_lisence(self):
+        RSAPubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
+        auth = "WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd=="
+        
+        result = Key.activate(token=auth,\
+                           rsa_pub_key=RSAPubKey,\
+                           product_id=3349, \
+                           key="ICVLD-VVSZR-ZTICT-YKGXL",\
+                           machine_code=Helpers.GetMachineCode())
+        
+        if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
+            # an error occurred or the key is invalid or it cannot be activated
+            # (eg. the limit of activated devices was achieved)
+            print("The license does not work: {0}".format(result[1]))
+        else:
+            # everything went fine if we are here!
+            print("The license is valid!")
+            license_key = result[0]
+            print("Feature 1: " + str(license_key.f1))
+            print("License expires: " + str(license_key.expires))
 
     @Slot()
     def new_file(self):
@@ -2703,7 +2714,7 @@ class Main(QObject):
 
         self.starting = True
         worker3 = Mythread_function_thread(self.progress_thread)
-        self.threadpool3.start(worker3)
+        self.threadpool.start(worker3)
 
         for x in range(x_pre, X):
             if self.run:
@@ -3461,7 +3472,7 @@ class Main(QObject):
         self.stopButton.emit()
         self.starting = True
         worker3 = Mythread_function_thread(self.progress_thread)
-        self.threadpool3.start(worker3)
+        self.threadpool.start(worker3)
 
         for i in Ps:
             if self.run:

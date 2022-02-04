@@ -21,6 +21,7 @@ Rectangle{
         ButtonPanel{
             id: btnDashboard
 
+            enabled: isLicensed
             Layout.fillWidth: true
             Layout.preferredHeight: 45 * ratio
 
@@ -37,6 +38,7 @@ Rectangle{
         ButtonPanel{
             id: btnLearn
 
+            enabled: isLicensed
             Layout.fillWidth: true
             Layout.preferredHeight: 45 * ratio
 
@@ -83,6 +85,22 @@ Rectangle{
 
             onBtnClicked: {
 
+            }
+
+        }
+
+        //-- License Button --//
+        ButtonPanel{
+            id: btnLicense
+
+            Layout.fillWidth: true
+            Layout.preferredHeight: 45 * ratio
+
+            icon: Icons.key
+            text: "License"
+
+            onBtnClicked: {
+                licenseform.visible = true
             }
 
         }
