@@ -13,6 +13,8 @@ ApplicationWindow{
     id: root_register
 
     property alias email    : input_Email.inputText
+    property real timeLimit: 30
+    property real numberOfDevices: 1
     property string gender  : ""
 
     property alias swipeIndex: swipe_register.currentIndex
@@ -22,28 +24,22 @@ ApplicationWindow{
         email.text = ""
     }
 
-    signal registe()
+    signal registe(var date)
     //    property bool checkRegisterValidation : RegiserValidation.checkValidation(mobile.text , email.text , name.text , gender , pass.text , c_pass.text)
 
     onRegiste: {
-        var data = {
-            'phone_number': mobile.text,
-            'password': pass.text,
-            'name': name.text,
+        var licenseData = {
             'email': email.text,
-            'gender': gender
+            'expired_on': date,
+            'deviceNumber': numberOfDevices,
+            'licenseType': "time limit"
         }
+        var endpoint = Service.url_license
 
-        var endpoint = Service.url_signup
-
-        Service.logIn( endpoint, data, function(resp, http) {
-
-            console.log( "state of " + authWin.objectName + " = " + http.status + " " + http.statusText + ', /n handle log in resp: ' + JSON.stringify(resp))
-
+        Service.create_item_notsecure( endpoint, licenseData, function(resp, http) {
             //-- check ERROR --//
             if(resp.hasOwnProperty('error')) // chack exist error in resp
             {
-                authWin.log("error detected; " + resp.error)
                 //                                    alarmLogin.msg = resp.error
                 alarmSignupWin.msg = "مشکلی در ارتباط با اینترنت وجود دارد"
                 return
@@ -55,40 +51,17 @@ ApplicationWindow{
 
                 //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
                 //                                    alarmLogin.msg = resp.non_field_errors.toString()
-                alarmSignupWin.msg = "کاربری با مشخصات وارد شده یافت نشد"
+                alarmSignupWin.msg = "Incorrect entered informations"
                 return
             }
-
-            _token_access = resp.access
-            _token_refresh = resp.refresh
-
-            //-- save user and pass --//
-            _userName = win_login.user.text
-            _password = win_login.pass.text
-
-            isLogined = true
-
-            //-- save in Setting --//
-            setting.username        = _userName
-            setting.password        = _password
-            setting.token_access    = _token_access
-            setting.token_refresh   = _token_refresh
-
+            var msg = "Thank you for purchasing the PoroX software license"
+            MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
             root_register.visible = false
-
         })
 
-        //        mobile.text = ""
-        //        email.text = ""
-        //        name.text = ""
-        //        pass.text = ""
-        //        c_pass.text = ""
-
-
-        alarm_popup.getAlarmData(Icons.check_all , "#00ff00" , "حساب کاربری به موفقیت ایجاد شد" , "تایید" , true , false , "rtl")
-        alarm_popup.open()
-
     }
+
+    Component.onCompleted: MainPython.timeLimitData.connect(registe)
 
     visible: true//false//
 
@@ -292,7 +265,15 @@ ApplicationWindow{
                                             ListElement { text: "360 days" }
                                         }
                                         onActivated: {
-
+                                            if (input_time.currentIndex === 0){
+                                                timeLimit = 30
+                                            }else if (input_time.currentIndex === 1){
+                                                timeLimit = 90
+                                            }else if (input_time.currentIndex === 2){
+                                                timeLimit = 120
+                                            }else if (input_time.currentIndex === 3){
+                                                timeLimit = 360
+                                            }
                                         }
                                     }
                                 }
@@ -327,7 +308,15 @@ ApplicationWindow{
                                             ListElement { text: "4" }
                                         }
                                         onActivated: {
-
+                                            if (input_device.currentIndex === 0){
+                                                numberOfDevices = 1
+                                            }else if (input_device.currentIndex === 1){
+                                                numberOfDevices = 2
+                                            }else if (input_device.currentIndex === 2){
+                                                numberOfDevices = 3
+                                            }else if (input_device.currentIndex === 3){
+                                                numberOfDevices = 4
+                                            }
                                         }
                                     }
 
@@ -359,7 +348,7 @@ ApplicationWindow{
                                         cursorShape: Qt.PointingHandCursor
 
                                         onClicked: {
-
+                                            MainPython.makeLicenseKey(timeLimit)
                                             //-- clear msg box --//
                                             alarmSignupWin.msg = ""
                                         }

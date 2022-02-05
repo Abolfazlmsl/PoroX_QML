@@ -47,6 +47,14 @@ from RelDiff import RelativeDiffusivity
 from licensing.models import *
 from licensing.methods import Key, Helpers
 
+from getmac import get_mac_address as gma
+import datetime
+import requests
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import smtplib
+
 application_path = (
     sys._MEIPASS
     if getattr(sys, "frozen", False)
@@ -96,10 +104,16 @@ class Main(QObject):
         self.phase_def = None
 
         self.project = {}
+        
+        self.Base = "http://127.0.0.1:8000/"
 
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(10)
 
+    macData = Signal(str)
+    device_id = Signal(int)
+    trialData = Signal(int, list, str)
+    timeLimitData = Signal(str)
     newFile = Signal()
     saveFile = Signal()
     openFile = Signal(str, float, float, float, float, float, list, list, list, list, str, int,
@@ -148,27 +162,68 @@ class Main(QObject):
     time = Signal(str, str)
     percent = Signal(int)
 
-    def check_lisence(self):
-        RSAPubKey = "<RSAKeyValue><Modulus>sGbvxwdlDbqFXOMlVUnAF5ew0t0WpPW7rFpI5jHQOFkht/326dvh7t74RYeMpjy357NljouhpTLA3a6idnn4j6c3jmPWBkjZndGsPL4Bqm+fwE48nKpGPjkj4q/yzT4tHXBTyvaBjA8bVoCTnu+LiC4XEaLZRThGzIn5KQXKCigg6tQRy0GXE13XYFVz/x1mjFbT9/7dS8p85n8BuwlY5JvuBIQkKhuCNFfrUxBWyu87CFnXWjIupCD2VO/GbxaCvzrRjLZjAngLCMtZbYBALksqGPgTUN7ZM24XbPWyLtKPaXF2i4XRR9u6eTj5BfnLbKAU5PIVfjIS+vNYYogteQ==</Modulus><Exponent>AQAB</Exponent></RSAKeyValue>"
-        auth = "WyIyNTU1IiwiRjdZZTB4RmtuTVcrQlNqcSszbmFMMHB3aWFJTlBsWW1Mbm9raVFyRyJd=="
-        
-        result = Key.activate(token=auth,\
-                           rsa_pub_key=RSAPubKey,\
-                           product_id=3349, \
-                           key="ICVLD-VVSZR-ZTICT-YKGXL",\
-                           machine_code=Helpers.GetMachineCode())
-        
-        if result[0] == None or not Helpers.IsOnRightMachine(result[0]):
-            # an error occurred or the key is invalid or it cannot be activated
-            # (eg. the limit of activated devices was achieved)
-            print("The license does not work: {0}".format(result[1]))
-        else:
-            # everything went fine if we are here!
-            print("The license is valid!")
-            license_key = result[0]
-            print("Feature 1: " + str(license_key.f1))
-            print("License expires: " + str(license_key.expires))
+    @Slot()
+    def enterLicense(self):
+        mac = self.getMacAddress()
+        self.macData.emit(mac)
 
+    @Slot(int)
+    def makeTrialData(self, time):
+        mac = self.getMacAddress()
+        device_id, keyData = self.postDevice(mac)
+        date = self.getExpiredDate(time)
+                                   
+        self.trialData.emit(device_id, keyData, date)
+
+    @Slot(int)
+    def makeLicenseKey(self, time):
+        date = self.getExpiredDate(time)
+        self.timeLimitData.emit(date)  
+        
+    def getMacAddress(self):
+        mac = gma()
+        return mac
+    
+    def getExpiredDate(self, time):
+        date = datetime.datetime.now() - datetime.timedelta(time)
+        return date.strftime('%Y-%m-%d')
+
+    def postDevice(self, mac):
+        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac})
+        l = requests.get(self.Base+"license/license/")
+
+        try:
+            return r.json()['id'], l.json()
+        except:
+            return -1, []
+    
+    @Slot(str)
+    def postDeviceSlot(self, mac):
+        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac})
+        self.device_id.emit(r.json()['id'])
+     
+        
+    @Slot(str, str, str, str)
+    def sendEmail(self, message, email, key, serial):
+        msg = MIMEMultipart()
+
+        password = "Abol7474"
+        msg['From'] = "abolfazlmoslemipoor@gmail.com"
+        msg['To'] = email
+        msg['Subject'] = "PoroX license"
+
+        message = message + "\nYour license key: " + key + "\nYour serial number: " + serial
+        msg.attach( MIMEText(message, 'plain') )
+
+        server = smtplib.SMTP(host='smtp.gmail.com', port=25)
+        server.starttls()
+
+        server.login(msg['From'], password)
+
+        server.sendmail( msg['From'], msg['To'], msg.as_string() )
+
+        server.quit()
+        
     @Slot()
     def new_file(self):
         self.inputType = None

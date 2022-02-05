@@ -9,6 +9,7 @@ import QtGraphicalEffects 1.0
 import QtQuick.Dialogs 1.3
 import QtQuick.Scene3D 2.15
 import Qt.labs.platform 1.1
+import Qt.labs.settings 1.1
 
 import "./Modules"
 import "./Fonts/Icon.js" as Icons
@@ -21,7 +22,20 @@ Window {
     height: Screen.height*0.85
     title: qsTr("PoroX")
 
-    //license properties
+    //-- save app setting --//
+    property var setting: Settings{
+        id: setting
+
+        //license properties
+        property bool isLicensed: false
+        property string username: ""
+        property string password: ""
+        property string token_access: ""
+        property string token_refresh: ""
+        property bool   isRemember
+
+    }
+
     property bool isLicensed: false
     signal showLogin()
     signal showTrial()
@@ -4611,7 +4625,7 @@ Window {
     LicenseForm{
         id: licenseform
 
-        visible: true
+        visible: !isLicensed
 
         //flags: Qt.Dialog //SplashScreen //Dialog
 

@@ -22,73 +22,62 @@ ApplicationWindow{
         email.text = ""
     }
 
-    signal registe()
-    //    property bool checkRegisterValidation : RegiserValidation.checkValidation(mobile.text , email.text , name.text , gender , pass.text , c_pass.text)
+    function isEmailExist(data, email){
+        for(var i=0; i<data.length; i++){
+            if(data[i].email===email && data[i].licenseType==="trial"){
+                return true
+            }
+        }
+        return false
+    }
+
+    signal registe(var device_id, var keyData, var date)
 
     onRegiste: {
-        var data = {
-            'phone_number': mobile.text,
-            'password': pass.text,
-            'name': name.text,
-            'email': email.text,
-            'gender': gender
+        if (device_id !== -1 && !isEmailExist){
+            var licenseData = {
+                'email': email.text,
+                'expired_on': date,
+                'deviceNumber': 1,
+                'licenseType': "trial",
+                'devices': [device_id],
+            }
+            var endpoint = Service.url_license
+
+            Service.create_item_notsecure( endpoint, licenseData, function(resp, http) {
+                //-- check ERROR --//
+                if(resp.hasOwnProperty('error')) // chack exist error in resp
+                {
+                    //                                    alarmLogin.msg = resp.error
+                    alarmSignupWin.msg = "مشکلی در ارتباط با اینترنت وجود دارد"
+                    return
+                }
+
+                //-- 400-Bad Request, 401-Unauthorized --//
+                //-- No active account found with the given credentials --//
+                if(http.status === 400 || http.status === 401 || resp.hasOwnProperty('non_field_errors')){
+
+                    //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
+                    //                                    alarmLogin.msg = resp.non_field_errors.toString()
+                    alarmSignupWin.msg = "Incorrect entered informations"
+                    return
+                }
+//                var msg = "Thank you for installing the PoroX software"
+//                MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
+                root_register.visible = false
+
+            })
+        }else if (device_id === -1){
+            print("You use trial version once before on this device")
+        }else{
+            var endpoint2 = Service.url_device + device_id + "/"
+            Service.delete_item_nonsecure( endpoint2, function(resp, http) {})
+            print("You use trial version once before by using this email")
         }
 
-        var endpoint = Service.url_signup
-
-        Service.logIn( endpoint, data, function(resp, http) {
-
-            console.log( "state of " + authWin.objectName + " = " + http.status + " " + http.statusText + ', /n handle log in resp: ' + JSON.stringify(resp))
-
-            //-- check ERROR --//
-            if(resp.hasOwnProperty('error')) // chack exist error in resp
-            {
-                authWin.log("error detected; " + resp.error)
-                //                                    alarmLogin.msg = resp.error
-                alarmSignupWin.msg = "مشکلی در ارتباط با اینترنت وجود دارد"
-                return
-            }
-
-            //-- 400-Bad Request, 401-Unauthorized --//
-            //-- No active account found with the given credentials --//
-            if(http.status === 400 || http.status === 401 || resp.hasOwnProperty('non_field_errors')){
-
-                //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
-                //                                    alarmLogin.msg = resp.non_field_errors.toString()
-                alarmSignupWin.msg = "کاربری با مشخصات وارد شده یافت نشد"
-                return
-            }
-
-            _token_access = resp.access
-            _token_refresh = resp.refresh
-
-            //-- save user and pass --//
-            _userName = win_login.user.text
-            _password = win_login.pass.text
-
-            isLogined = true
-
-            //-- save in Setting --//
-            setting.username        = _userName
-            setting.password        = _password
-            setting.token_access    = _token_access
-            setting.token_refresh   = _token_refresh
-
-            root_register.visible = false
-
-        })
-
-        //        mobile.text = ""
-        //        email.text = ""
-        //        name.text = ""
-        //        pass.text = ""
-        //        c_pass.text = ""
-
-
-        alarm_popup.getAlarmData(Icons.check_all , "#00ff00" , "حساب کاربری به موفقیت ایجاد شد" , "تایید" , true , false , "rtl")
-        alarm_popup.open()
-
     }
+
+    Component.onCompleted: MainPython.trialData.connect(registe)
 
     visible: true//false//
 
@@ -211,14 +200,6 @@ ApplicationWindow{
                     interactive: false
                     currentIndex: 0
 
-                    onCurrentIndexChanged: {
-                        if(currentIndex === 1){
-                            timer_confirmSMS.resetTimer()
-                            timer_confirmSMS.minutes = 1
-                            timer_confirmSMS.startTimer()
-                        }
-                    }
-
                     //-- fill inputs --//
                     Item {
                         Rectangle{
@@ -259,7 +240,7 @@ ApplicationWindow{
                                     icon: Icons.email_outline
                                     placeholder: "E-Mail"
 
-//                                    inputText.validator: RegularExpressionValidator { regularExpression: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ }
+                                    //                                    inputText.validator: RegularExpressionValidator { regularExpression: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ }
                                 }
 
                                 //-- spacer --//
@@ -288,7 +269,7 @@ ApplicationWindow{
                                         cursorShape: Qt.PointingHandCursor
 
                                         onClicked: {
-
+                                            MainPython.makeTrialData(15)
                                             //-- clear msg box --//
                                             alarmSignupWin.msg = ""
                                         }

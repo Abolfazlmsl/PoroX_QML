@@ -11,11 +11,93 @@ import "./../REST/apiService.js" as Service
 ApplicationWindow{
     id: root_auth
 
-    signal enterKey()
+    signal enterKey(var mac)
+    property var licenseData
+
+    function isMacExist(data, mac){
+        for (var j=0; j<data.length;j++){
+            if (data[j].deviceMac === mac){
+                return true
+            }
+        }
+        return false
+    }
+
+    function getDeviceid(data, mac){
+        for (var j=0; j<data.length;j++){
+            if (data[j].deviceMac === mac){
+                return data[j].id
+            }
+        }
+    }
+
     onEnterKey: {
-        Service.get_all(Service.url_license , function(data, xhr){
-            print(JSON.stringify(data))
+        Service.get_all(Service.url_license , function(data, http){
+            //-- check ERROR --//
+            if(data.hasOwnProperty('error')) // chack exist error in resp
+            {
+                //                                    alarmLogin.msg = resp.error
+                alarmLoginWin.msg = "No internet connection"
+                return
+            }
+
+            //-- 400-Bad Request, 401-Unauthorized --//
+            //-- No active account found with the given credentials --//
+            if(http.status === 400 || http.status === 401 || data.hasOwnProperty('non_field_errors')){
+
+                //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
+                //                                    alarmLogin.msg = resp.non_field_errors.toString()
+                alarmLoginWin.msg = "Incorrect license key"
+                return
+            }
+
+            for (var i = 0; i < data.length; i++){
+                if (data[i].key === user.text){
+                    Service.get_all(Service.url_device , function(data2, http2){
+                        if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
+                            licenseData = data[i]
+                            MainPython.postDeviceSlot(mac)
+                            isLicensed = true
+                            root_auth.visible = false
+                            return
+                        }else if (data[i].deviceNumber > data[i].devices.length && isMacExist(data2, mac)){
+                            licenseData = data[i]
+                            updateLicenseInfo(getDeviceid(data2, mac))
+                            isLicensed = true
+                            root_auth.visible = false
+                            return
+                        }else if (data[i].deviceNumber === data[i].devices.length && isMacExist(data2, mac)){
+                            isLicensed = true
+                            root_auth.visible = false
+                            return
+                        }else{return}
+                    })
+                    return
+                }
+            }
         })
+    }
+
+    signal updateLicenseInfo(var device_id)
+    onUpdateLicenseInfo: {
+        licenseData.devices[licenseData.devices.length] = device_id
+        var newLicenseData = {
+            'key': licenseData.key,
+            'email': licenseData.email,
+            'expired_on': licenseData.expired_on,
+            'deviceNumber': licenseData.deviceNumber,
+            'licenseType': licenseData.licenseType,
+            'serialNumber': licenseData.serialNumber,
+            'devices': licenseData.devices,
+        }
+
+        var endpoint = Service.url_license + licenseData.id + "/"
+        Service.update_item_notsecure(endpoint, newLicenseData, function(resp, http) {})
+    }
+
+    Component.onCompleted: {
+        MainPython.macData.connect(enterKey)
+        MainPython.device_id.connect(updateLicenseInfo)
     }
 
     property alias alarmLogin: alarmLoginWin
@@ -25,7 +107,6 @@ ApplicationWindow{
     signal resetForm()
     onResetForm: {
         input_UserName.inputText.text = ""
-        input_Password.inputText.text = ""
         input_UserName.inputText.forceActiveFocus()
     }
 
@@ -203,7 +284,7 @@ ApplicationWindow{
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    enterKey()
+                                    MainPython.enterLicense()
                                 }
                             }
                         }

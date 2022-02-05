@@ -5,6 +5,7 @@ var BASE = 'http://127.0.0.1:8000'
 
 //-- api urls --//
 var url_license = 'license/license/'
+var url_device = 'license/device/'
 
 function get_all(endpoint, cb) {
     request(null, 'GET', endpoint/*null*/, null, cb)
@@ -18,7 +19,7 @@ function get_data(token, endpoint, entry, cb) {
     request(token, 'GET', endpoint, entry, cb)
 }
 
-function logIn(endpoint, entry, cb) {
+function create_item_notsecure(endpoint, entry, cb) {
     request(null, 'POST', endpoint, entry, cb)
 }
 
@@ -38,8 +39,16 @@ function get_item(name, cb) {
     request(null, 'GET', name, null, cb)
 }
 
+function update_item_notsecure(name, entry, cb) {
+    request(null, 'PUT', name, entry, cb)
+}
+
 function update_item(token, name, entry, cb) {
     request(token, 'PUT', name, entry, cb)
+}
+
+function delete_item_nonsecure(name, cb) {
+    request(null, 'DELETE', name, null, cb)
 }
 
 function delete_item(token, name, cb) {
