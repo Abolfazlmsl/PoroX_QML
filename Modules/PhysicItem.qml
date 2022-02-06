@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 
+import "./../Functions/functions.js" as Functions
+
 Item {
     id: poreitem
 
@@ -129,13 +131,13 @@ Item {
                                                              })
                                     }else{
                                         capillarypressureType = ""
-                                        var index = findprops(physicmodel, "Capillary pressure")
+                                        var index = Functions.findprops(physicmodel, "Capillary pressure")
                                         if(index !== null){
                                             physicmodel.remove(index)
                                         }
                                     }
 
-                                    var index = find(helpmodel, "Capillary pressure")
+                                    var index = Functions.find(helpmodel, "Capillary pressure")
                                     if(index !== null){
                                         helpmodel.setProperty(index, "check", capillarypressure)
                                     }
@@ -232,13 +234,13 @@ Item {
                                                              })
                                     }else{
                                         diffusivecondType = ""
-                                        var index = findprops(physicmodel, "Diffusive conductance")
+                                        var index = Functions.findprops(physicmodel, "Diffusive conductance")
                                         if(index !== null){
                                             physicmodel.remove(index)
                                         }
                                     }
 
-                                    var index = find(helpmodel, "Diffusive conductance")
+                                    var index = Functions.find(helpmodel, "Diffusive conductance")
                                     if(index !== null){
                                         helpmodel.setProperty(index, "check", diffusivecond)
                                     }
@@ -329,12 +331,12 @@ Item {
                                                              })
                                     }else{
                                         hydrauliccondType = ""
-                                        var index = findprops(physicmodel, "Hydraulic conductance")
+                                        var index = Functions.findprops(physicmodel, "Hydraulic conductance")
                                         if(index !== null){
                                             physicmodel.remove(index)
                                         }
                                     }
-                                    var index = find(helpmodel, "Hydraulic conductance")
+                                    var index = Functions.find(helpmodel, "Hydraulic conductance")
                                     if(index !== null){
                                         helpmodel.setProperty(index, "check", hydrauliccond)
                                     }
@@ -408,12 +410,12 @@ Item {
                                                              })
                                     }else{
                                         multiphaseType = ""
-                                        var index = findprops(physicmodel, "Multiphase")
+                                        var index = Functions.findprops(physicmodel, "Multiphase")
                                         if(index !== null){
                                             physicmodel.remove(index)
                                         }
                                     }
-                                    var index = find(helpmodel, "Multiphase")
+                                    var index = Functions.find(helpmodel, "Multiphase")
                                     if(index !== null){
                                         helpmodel.setProperty(index, "check", multiphase)
                                     }
@@ -492,13 +494,13 @@ Item {
                                                              })
                                     }else{
                                         flowshapefactorType = ""
-                                        var index = findprops(physicmodel, "Flow shape factor")
+                                        var index = Functions.findprops(physicmodel, "Flow shape factor")
                                         if(index !== null){
                                             physicmodel.remove(index)
                                         }
                                     }
 
-                                    var index = find(helpmodel, "Flow shape factor")
+                                    var index = Functions.find(helpmodel, "Flow shape factor")
                                     if(index !== null){
                                         helpmodel.setProperty(index, "check", flowshapefactor)
                                     }
@@ -580,12 +582,12 @@ Item {
                                                              })
                                     }else{
                                         poissonshapefactorType = ""
-                                        var index = findprops(physicmodel, "Poisson shape factor")
+                                        var index = Functions.findprops(physicmodel, "Poisson shape factor")
                                         if(index !== null){
                                             physicmodel.remove(index)
                                         }
                                     }
-                                    var index = find(helpmodel, "Poisson shape factor")
+                                    var index = Functions.find(helpmodel, "Poisson shape factor")
                                     if(index !== null){
                                         helpmodel.setProperty(index, "check", poissonshapefactor)
                                     }
@@ -619,42 +621,42 @@ Item {
     }
 
     function cpChange(){
-        var index = findprops(physicmodel, "Capillary pressure")
+        var index = Functions.findprops(physicmodel, "Capillary pressure")
         if(index !== null){
             physicmodel.setProperty(index, "proptext", "Capillary pressure" + " (" + capillarypressureType + ")")
         }
     }
 
     function diffChange(){
-        var index = findprops(physicmodel, "Diffusive conductance")
+        var index = Functions.findprops(physicmodel, "Diffusive conductance")
         if(index !== null){
             physicmodel.setProperty(index, "proptext", "Diffusive conductance" + " (" + diffusivecondType + ")")
         }
     }
 
     function hydChange(){
-        var index = findprops(physicmodel, "Hydraulic conductance")
+        var index = Functions.findprops(physicmodel, "Hydraulic conductance")
         if(index !== null){
             physicmodel.setProperty(index, "proptext", "Hydraulic conductance" + " (" + hydrauliccondType + ")")
         }
     }
 
     function multiChange(){
-        var index = findprops(physicmodel, "Multiphase")
+        var index = Functions.findprops(physicmodel, "Multiphase")
         if(index !== null){
             physicmodel.setProperty(index, "proptext", "Multiphase" + " (" + multiphaseType + ")")
         }
     }
 
     function flowChange(){
-        var index = findprops(physicmodel, "Flow shape factor")
+        var index = Functions.findprops(physicmodel, "Flow shape factor")
         if(index !== null){
             physicmodel.setProperty(index, "proptext", "Flow shape factor" + " (" + flowshapefactorType + ")")
         }
     }
 
     function poiChange(){
-        var index = findprops(physicmodel, "Poisson shape factor")
+        var index = Functions.findprops(physicmodel, "Poisson shape factor")
         if(index !== null){
             physicmodel.setProperty(index, "proptext", "Poisson shape factor" + " (" + poissonshapefactorType + ")")
         }

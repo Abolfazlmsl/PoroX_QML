@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 import "./../Fonts/Icon.js" as Icons
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: defendingitem
@@ -445,7 +446,7 @@ Item {
                                                                      })
                                             }else{
                                                 defenddensityType = ""
-                                                var index = findprops(phasedefmodel, "Defend Density")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Density")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -453,7 +454,7 @@ Item {
 
                                             mwText.enabled = false
 
-                                            var index = find(helpmodel, "Defending density")
+                                            var index = Functions.find(helpmodel, "Defending density")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", defenddensity)
                                             }
@@ -604,13 +605,13 @@ Item {
                                                 diffModel.clear()
                                                 diffOpen = !diffOpen
                                                 defenddiffusivityType = ""
-                                                var index = findprops(phasedefmodel, "Defend Diffusivity")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Diffusivity")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
                                             }
 
-                                            var index = find(helpmodel, "Defending diffusivity")
+                                            var index = Functions.find(helpmodel, "Defending diffusivity")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", defenddiffusivity)
                                             }
@@ -812,7 +813,7 @@ Item {
                                                 upelectrical.restart()
                                                 electricalModel.clear()
                                                 electricalOpen = !electricalOpen
-                                                var index = findprops(phasedefmodel, "Defend Electrical conductivity")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Electrical conductivity")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -964,7 +965,7 @@ Item {
                                                 mixtureModel.clear()
                                                 mixOpen = !mixOpen
                                                 defendmixtureType = ""
-                                                var index = findprops(phasedefmodel, "Defend Mixtures")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Mixtures")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -1160,7 +1161,7 @@ Item {
                                                                      })
                                             }else{
                                                 defendmolarType = ""
-                                                var index = findprops(phasedefmodel, "Defend Molar density")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Molar density")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -1179,7 +1180,7 @@ Item {
                                                 mwText.enabled = false
                                             }
 
-                                            var index = find(helpmodel, "Defending molar density")
+                                            var index = Functions.find(helpmodel, "Defending molar density")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", defendmolar)
                                             }
@@ -1292,7 +1293,7 @@ Item {
                                                 uppart.restart()
                                                 partcoeffModel.clear()
                                                 partOpen = !partOpen
-                                                var index = findprops(phasedefmodel, "Defend Partition coefficient")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Partition coefficient")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -1385,7 +1386,7 @@ Item {
                                                                      "proptext": "Permittivity"
                                                                  })
                                         }else{
-                                            var index = findprops(phasedefmodel, "Defend Permittivity")
+                                            var index = Functions.findprops(phasedefmodel, "Defend Permittivity")
                                             if(index !== null){
                                                 phasedefmodel.remove(index)
                                             }
@@ -1469,7 +1470,7 @@ Item {
                                                 surfModel.clear()
                                                 surfOpen = !surfOpen
                                                 defendsurfType = ""
-                                                var index = findprops(phasedefmodel, "Defend Surface tension")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Surface tension")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -1478,7 +1479,7 @@ Item {
                                             critempText.enabled = false
                                             cripressureText.enabled = false
 
-                                            var index = find(helpmodel, "Defending surface tension")
+                                            var index = Functions.find(helpmodel, "Defending surface tension")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", defendsurf)
                                             }
@@ -1694,7 +1695,7 @@ Item {
                                                 vaporpressureModel.clear()
                                                 vaporOpen = !vaporOpen
                                                 defendvaporType = ""
-                                                var index = findprops(phasedefmodel, "Defend Vapor pressure")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Vapor pressure")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -1893,7 +1894,7 @@ Item {
                                                 viscosityModel.clear()
                                                 visOpen = !visOpen
                                                 defendviscosityType = ""
-                                                var index = findprops(phasedefmodel, "Defend Viscosity")
+                                                var index = Functions.findprops(phasedefmodel, "Defend Viscosity")
                                                 if(index !== null){
                                                     phasedefmodel.remove(index)
                                                 }
@@ -2428,35 +2429,35 @@ Item {
     }
 
     function defenddenChange(){
-        var index = findprops(phasedefmodel, "Defend Density")
+        var index = Functions.findprops(phasedefmodel, "Defend Density")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Density" + " (" + defenddensityType + ")")
         }
     }
 
     function defenddiffChange(){
-        var index = findprops(phasedefmodel, "Defend Diffusivity")
+        var index = Functions.findprops(phasedefmodel, "Defend Diffusivity")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Diffusivity" + " (" + defenddiffusivityType + ")")
         }
     }
 
     function defendmixChange(){
-        var index = findprops(phasedefmodel, "Defend Mixtures")
+        var index = Functions.findprops(phasedefmodel, "Defend Mixtures")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Mixtures" + " (" + defendmixtureType + ")")
         }
     }
 
     function defendmolarChange(){
-        var index = findprops(phasedefmodel, "Defend Molar density")
+        var index = Functions.findprops(phasedefmodel, "Defend Molar density")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Molar density" + " (" + defendmolarType + ")")
         }
     }
 
     function defendsurfChange(){
-        var index = findprops(phasedefmodel, "Defend Surface tension")
+        var index = Functions.findprops(phasedefmodel, "Defend Surface tension")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Surface tension" + " (" + defendsurfType + ")")
         }
@@ -2464,14 +2465,14 @@ Item {
 
 
     function defendvaporChange(){
-        var index = findprops(phasedefmodel, "Defend Vapor pressure")
+        var index = Functions.findprops(phasedefmodel, "Defend Vapor pressure")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Vapor pressure" + " (" + defendvaporType + ")")
         }
     }
 
     function defendvisChange(){
-        var index = findprops(phasedefmodel, "Defend Viscosity")
+        var index = Functions.findprops(phasedefmodel, "Defend Viscosity")
         if(index !== null){
             phasedefmodel.setProperty(index, "proptext", "Viscosity" + " (" + defendviscosityType + ")")
         }

@@ -41,7 +41,8 @@ ApplicationWindow{
             if(resp.hasOwnProperty('error')) // chack exist error in resp
             {
                 //                                    alarmLogin.msg = resp.error
-                alarmSignupWin.msg = "مشکلی در ارتباط با اینترنت وجود دارد"
+                alarmSignupWin.msg = "Connection error"
+                spinner.visible = false
                 return
             }
 
@@ -52,11 +53,15 @@ ApplicationWindow{
                 //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
                 //                                    alarmLogin.msg = resp.non_field_errors.toString()
                 alarmSignupWin.msg = "Incorrect entered informations"
+                spinner.visible = false
                 return
             }
-            var msg = "Thank you for purchasing the PoroX software license"
-            MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
+//            var msg = "Thank you for purchasing the PoroX software license"
+//            MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
+            spinner.visible = false
             root_register.visible = false
+            successDynamicPop.messageText = "The license was sent to your email"
+            animationdynamicpop.restart()
         })
 
     }
@@ -139,7 +144,7 @@ ApplicationWindow{
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                             text: "Welcome to PoroX"
-                            color: "white"
+                            color: "black"
 
                             font.pixelSize: Qt.application.font.pixelSize * 2.2
                             horizontalAlignment: Qt.AlignHCenter
@@ -150,13 +155,14 @@ ApplicationWindow{
                             Layout.preferredHeight: 4
                             radius: 2
                             Layout.alignment: Qt.AlignHCenter
+                            color: "black"
                         }
 
                         Label{
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                             text: "Digital Rock Analysis Software"
-                            color: "white"
+                            color: "black"
 
                             font.pixelSize: Qt.application.font.pixelSize * 1.3
                             horizontalAlignment: Qt.AlignHCenter
@@ -204,7 +210,7 @@ ApplicationWindow{
 
                             ColumnLayout{
                                 width: parent.width
-                                height: parent.height * 0.9
+                                height: parent.height
                                 spacing: 10
 
                                 //-- spacer --//
@@ -348,9 +354,8 @@ ApplicationWindow{
                                         cursorShape: Qt.PointingHandCursor
 
                                         onClicked: {
+                                            spinner.visible = true
                                             MainPython.makeLicenseKey(timeLimit)
-                                            //-- clear msg box --//
-                                            alarmSignupWin.msg = ""
                                         }
                                     }
                                 }
@@ -399,6 +404,17 @@ ApplicationWindow{
                                         }
                                     }
 
+                                }
+
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 15}
+
+                                LoadingSpinner{
+                                    id: spinner
+                                    visible: false
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                    leftMarg: 60
                                 }
 
                                 //-- filler --//

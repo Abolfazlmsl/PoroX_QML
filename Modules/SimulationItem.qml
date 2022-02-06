@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 
+import "./../Functions/functions.js" as Functions
+
 Item {
     id: siumlationitem
 
@@ -121,7 +123,7 @@ Item {
                 }
             }
 
-            if (!findbyNameBool(sceneModel, "3D Network")){
+            if (!Functions.findbyNameBool(sceneModel, "3D Network")){
                 sceneModel.append(
                             {
                                 "name":"3D Network",
@@ -345,7 +347,7 @@ Item {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        checkprops()
+                        Functions.checkprops()
                         if (helpmodel.count > 0){
                             isHelpOn = true
                             return

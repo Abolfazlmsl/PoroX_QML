@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: filteritem
@@ -57,7 +58,7 @@ Item {
                                         })
             }
 
-            if (!findbyName(scene2dModel, "2D Filter")){
+            if (!Functions.findbyName(scene2dModel, "2D Filter")){
                 scene2dModel.append(
                             {
                                 "name":"2D Filter",

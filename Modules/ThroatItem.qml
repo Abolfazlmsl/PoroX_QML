@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 import "./../Fonts/Icon.js" as Icons
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: poreitem
@@ -170,13 +171,13 @@ Item {
                                     throatdiamModel.clear()
                                     diamopen = !diamopen
                                     throatdiamType = ""
-                                    var index = findprops(geometrymodel, "Throat diameter")
+                                    var index = Functions.findprops(geometrymodel, "Throat diameter")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.diameter")
+                                var index = Functions.find(helpmodel, "throat.diameter")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatdiam)
                                 }
@@ -362,13 +363,13 @@ Item {
                                                       })
                                 }else{
                                     throatseedType = ""
-                                    var index = findprops(geometrymodel, "Throat seed")
+                                    var index = Functions.findprops(geometrymodel, "Throat seed")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.seed")
+                                var index = Functions.find(helpmodel, "throat.seed")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatseed)
                                 }
@@ -470,13 +471,13 @@ Item {
                                                       })
                                 }else{
                                     throatsurfType = ""
-                                    var index = findprops(geometrymodel, "Throat surface area")
+                                    var index = Functions.findprops(geometrymodel, "Throat surface area")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.surface area")
+                                var index = Functions.find(helpmodel, "throat.surface area")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatsurf)
                                 }
@@ -599,12 +600,12 @@ Item {
                                                       })
                                 }else{
                                     throatvolType = ""
-                                    var index = findprops(geometrymodel, "Throat volume")
+                                    var index = Functions.findprops(geometrymodel, "Throat volume")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
-                                var index = find(helpmodel, "throat.volume")
+                                var index = Functions.find(helpmodel, "throat.volume")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatvol)
                                 }
@@ -708,13 +709,13 @@ Item {
                                                       })
                                 }else{
                                     throatareaType = ""
-                                    var index = findprops(geometrymodel, "Throat area")
+                                    var index = Functions.findprops(geometrymodel, "Throat area")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.area")
+                                var index = Functions.find(helpmodel, "throat.area")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatarea)
                                 }
@@ -829,13 +830,13 @@ Item {
                                                       })
                                 }else{
                                     throatendpointType = ""
-                                    var index = findprops(geometrymodel, "Throat endpoints")
+                                    var index = Functions.findprops(geometrymodel, "Throat endpoints")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.end points")
+                                var index = Functions.find(helpmodel, "throat.end points")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatendpoint)
                                 }
@@ -945,13 +946,13 @@ Item {
                                                       })
                                 }else{
                                     throatlengthType = ""
-                                    var index = findprops(geometrymodel, "Throat length")
+                                    var index = Functions.findprops(geometrymodel, "Throat length")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.length")
+                                var index = Functions.find(helpmodel, "throat.length")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatlength)
                                 }
@@ -1045,12 +1046,12 @@ Item {
                                                       })
                                 }else{
                                     throatperimType = ""
-                                    var index = findprops(geometrymodel, "Throat perimeter")
+                                    var index = Functions.findprops(geometrymodel, "Throat perimeter")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
-                                var index = find(helpmodel, "throat.perimeter")
+                                var index = Functions.find(helpmodel, "throat.perimeter")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatperim)
                                 }
@@ -1143,13 +1144,13 @@ Item {
                                                       })
                                 }else{
                                     throatshapefactorType = ""
-                                    var index = findprops(geometrymodel, "Throat shape factor")
+                                    var index = Functions.findprops(geometrymodel, "Throat shape factor")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "throat.shape factor")
+                                var index = Functions.find(helpmodel, "throat.shape factor")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", throatshapefactor)
                                 }
@@ -1209,13 +1210,13 @@ Item {
 //                                                          "proptext": "Throat centroid"
 //                                                      })
 //                                }else{
-//                                    var index = findprops(geometrymodel, "Throat centroid")
+//                                    var index = Functions.findprops(geometrymodel, "Throat centroid")
 //                                    if(index !== null){
 //                                        geometrymodel.remove(index)
 //                                    }
 //                                }
 
-//                                var index = find(helpmodel, "throat.centroid")
+//                                var index = Functions.find(helpmodel, "throat.centroid")
 //                                if(index !== null){
 //                                    helpmodel.setProperty(index, "check", throatcentroid)
 //                                }
@@ -1242,13 +1243,13 @@ Item {
 //                                                          "proptext": "Throat vector"
 //                                                      })
 //                                }else{
-//                                    var index = findprops(geometrymodel, "Throat vector")
+//                                    var index = Functions.findprops(geometrymodel, "Throat vector")
 //                                    if(index !== null){
 //                                        geometrymodel.remove(index)
 //                                    }
 //                                }
 
-//                                var index = find(helpmodel, "throat.vector")
+//                                var index = Functions.find(helpmodel, "throat.vector")
 //                                if(index !== null){
 //                                    helpmodel.setProperty(index, "check", throatvector)
 //                                }
@@ -1261,57 +1262,57 @@ Item {
     }
 
     function throatdiamChange(){
-        var index = findprops(geometrymodel, "Throat diameter")
+        var index = Functions.findprops(geometrymodel, "Throat diameter")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat diameter" + " (" + throatdiamType + ")")
         }
     }
 
     function throatseedChange(){
-        var index = findprops(geometrymodel, "Throat seed")
+        var index = Functions.findprops(geometrymodel, "Throat seed")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat seed" + " (" + throatseedType + ")")
         }
     }
     function throatsurfChange(){
-        var index = findprops(geometrymodel, "Throat surface area")
+        var index = Functions.findprops(geometrymodel, "Throat surface area")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat surface area" + " (" + throatsurfType + ")")
         }
     }
     function throatvolChange(){
-        var index = findprops(geometrymodel, "Throat volume")
+        var index = Functions.findprops(geometrymodel, "Throat volume")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat volume" + " (" + throatvolType + ")")
         }
     }
     function throatareaChange(){
-        var index = findprops(geometrymodel, "Throat area")
+        var index = Functions.findprops(geometrymodel, "Throat area")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat area" + " (" + throatareaType + ")")
         }
     }
 
     function throatendChange(){
-        var index = findprops(geometrymodel, "Throat endpoints")
+        var index = Functions.findprops(geometrymodel, "Throat endpoints")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat endpoints" + " (" + throatendpointType + ")")
         }
     }
     function throatlenChange(){
-        var index = findprops(geometrymodel, "Throat length")
+        var index = Functions.findprops(geometrymodel, "Throat length")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat length" + " (" + throatlengthType + ")")
         }
     }
     function throatperiChange(){
-        var index = findprops(geometrymodel, "Throat perimeter")
+        var index = Functions.findprops(geometrymodel, "Throat perimeter")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat perimeter" + " (" + throatperimType + ")")
         }
     }
     function throatshapeChange(){
-        var index = findprops(geometrymodel, "Throat shape factor")
+        var index = Functions.findprops(geometrymodel, "Throat shape factor")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Throat shape factor" + " (" + throatshapefactorType + ")")
         }

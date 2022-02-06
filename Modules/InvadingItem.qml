@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 import "./../Fonts/Icon.js" as Icons
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: invadingitem
@@ -446,7 +447,7 @@ Item {
                                                                      })
                                             }else{
                                                 invadedensityType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Density")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Density")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -454,7 +455,7 @@ Item {
 
                                             mwText.enabled = false
 
-                                            var index = find(helpmodel, "Invading density")
+                                            var index = Functions.find(helpmodel, "Invading density")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", invadedensity)
                                             }
@@ -606,13 +607,13 @@ Item {
                                                 diffModel.clear()
                                                 diffOpen = !diffOpen
                                                 invadediffusivityType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Diffusivity")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Diffusivity")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
                                             }
 
-                                            var index = find(helpmodel, "Invading diffusivity")
+                                            var index = Functions.find(helpmodel, "Invading diffusivity")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", invadediffusivity)
                                             }
@@ -814,7 +815,7 @@ Item {
                                                 upelectrical.restart()
                                                 electricalModel.clear()
                                                 electricalOpen = !electricalOpen
-                                                var index = findprops(phaseinvmodel, "Invade Electrical conductivity")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Electrical conductivity")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -966,7 +967,7 @@ Item {
                                                 mixtureModel.clear()
                                                 mixOpen = !mixOpen
                                                 invademixtureType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Mixtures")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Mixtures")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -1163,7 +1164,7 @@ Item {
                                                                      })
                                             }else{
                                                 invademolarType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Molar density")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Molar density")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -1182,7 +1183,7 @@ Item {
                                                 mwText.enabled = false
                                             }
 
-                                            var index = find(helpmodel, "Invading molar density")
+                                            var index = Functions.find(helpmodel, "Invading molar density")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", invademolar)
                                             }
@@ -1296,7 +1297,7 @@ Item {
                                                 uppart.restart()
                                                 partcoeffModel.clear()
                                                 partOpen = !partOpen
-                                                var index = findprops(phaseinvmodel, "Invade Partition coefficient")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Partition coefficient")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -1389,7 +1390,7 @@ Item {
                                                                      "proptext": "Permittivity"
                                                                  })
                                         }else{
-                                            var index = findprops(phaseinvmodel, "Invade Permittivity")
+                                            var index = Functions.findprops(phaseinvmodel, "Invade Permittivity")
                                             if(index !== null){
                                                 phaseinvmodel.remove(index)
                                             }
@@ -1473,7 +1474,7 @@ Item {
                                                 surfModel.clear()
                                                 surfOpen = !surfOpen
                                                 invadesurfType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Surface tension")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Surface tension")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -1482,7 +1483,7 @@ Item {
                                             critempText.enabled = false
                                             cripressureText.enabled = false
 
-                                            var index = find(helpmodel, "Invading surface tension")
+                                            var index = Functions.find(helpmodel, "Invading surface tension")
                                             if(index !== null){
                                                 helpmodel.setProperty(index, "check", invadesurf)
                                             }
@@ -1702,7 +1703,7 @@ Item {
                                                 vaporpressureModel.clear()
                                                 vaporOpen = !vaporOpen
                                                 invadevaporType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Vapor pressure")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Vapor pressure")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -1902,7 +1903,7 @@ Item {
                                                 viscosityModel.clear()
                                                 visOpen = !visOpen
                                                 invadeviscosityType = ""
-                                                var index = findprops(phaseinvmodel, "Invade Viscosity")
+                                                var index = Functions.findprops(phaseinvmodel, "Invade Viscosity")
                                                 if(index !== null){
                                                     phaseinvmodel.remove(index)
                                                 }
@@ -2434,35 +2435,35 @@ Item {
     }
 
     function invadedenChange(){
-        var index = findprops(phaseinvmodel, "Invade Density")
+        var index = Functions.findprops(phaseinvmodel, "Invade Density")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Density" + " (" + invadedensityType + ")")
         }
     }
 
     function invadediffChange(){
-        var index = findprops(phaseinvmodel, "Invade Diffusivity")
+        var index = Functions.findprops(phaseinvmodel, "Invade Diffusivity")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Diffusivity" + " (" + invadediffusivityType + ")")
         }
     }
 
     function invademixChange(){
-        var index = findprops(phaseinvmodel, "Invade Mixtures")
+        var index = Functions.findprops(phaseinvmodel, "Invade Mixtures")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Mixtures" + " (" + invademixtureType + ")")
         }
     }
 
     function invademolarChange(){
-        var index = findprops(phaseinvmodel, "Invade Molar density")
+        var index = Functions.findprops(phaseinvmodel, "Invade Molar density")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Molar density" + " (" + invademolarType + ")")
         }
     }
 
     function invadesurfChange(){
-        var index = findprops(phaseinvmodel, "Invade Surface tension")
+        var index = Functions.findprops(phaseinvmodel, "Invade Surface tension")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Surface tension" + " (" + invadesurfType + ")")
         }
@@ -2470,14 +2471,14 @@ Item {
 
 
     function invadevaporChange(){
-        var index = findprops(phaseinvmodel, "Invade Vapor pressure")
+        var index = Functions.findprops(phaseinvmodel, "Invade Vapor pressure")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Vapor pressure" + " (" + invadevaporType + ")")
         }
     }
 
     function invadevisChange(){
-        var index = findprops(phaseinvmodel, "Invade Viscosity")
+        var index = Functions.findprops(phaseinvmodel, "Invade Viscosity")
         if(index !== null){
             phaseinvmodel.setProperty(index, "proptext", "Viscosity" + " (" + invadeviscosityType + ")")
         }

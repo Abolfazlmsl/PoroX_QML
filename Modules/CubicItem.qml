@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 
+import "./../Functions/functions.js" as Functions
+
 Item {
     id: cubicitem
 
@@ -69,7 +71,7 @@ Item {
                 }
             }
 
-            if (!findbyNameBool(sceneModel, "3D Network")){
+            if (!Functions.findbyNameBool(sceneModel, "3D Network")){
                 sceneModel.append(
                             {
                                 "name":"3D Network",

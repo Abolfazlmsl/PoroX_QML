@@ -31,10 +31,10 @@ ApplicationWindow{
         return false
     }
 
-    signal registe(var device_id, var keyData, var date)
+    signal registe(var device_id, var keyData, var date, bool vpn)
 
     onRegiste: {
-        if (device_id !== -1 && !isEmailExist){
+        if (device_id !== -1 && !vpn && !isEmailExist(data, email)){
             var licenseData = {
                 'email': email.text,
                 'expired_on': date,
@@ -49,7 +49,8 @@ ApplicationWindow{
                 if(resp.hasOwnProperty('error')) // chack exist error in resp
                 {
                     //                                    alarmLogin.msg = resp.error
-                    alarmSignupWin.msg = "مشکلی در ارتباط با اینترنت وجود دارد"
+                    alarmTrialWin.msg = "مشکلی در ارتباط با اینترنت وجود دارد"
+                    spinner.visible = false
                     return
                 }
 
@@ -59,20 +60,31 @@ ApplicationWindow{
 
                     //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
                     //                                    alarmLogin.msg = resp.non_field_errors.toString()
-                    alarmSignupWin.msg = "Incorrect entered informations"
+                    alarmTrialWin.msg = "Incorrect entered informations"
+                    spinner.visible = false
                     return
                 }
 //                var msg = "Thank you for installing the PoroX software"
 //                MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
+                spinner.visible = false
                 root_register.visible = false
+                successDynamicPop.messageText = "The license was sent to your email"
+                animationdynamicpop.restart()
 
             })
         }else if (device_id === -1){
-            print("You use trial version once before on this device")
+            alarmTrialWin.msg = "You use trial version once before on this device"
+            spinner.visible = false
+        }else if (vpn){
+            var endpoint2 = Service.url_device + device_id + "/"
+            Service.delete_item_nonsecure( endpoint2, function(resp, http) {})
+            alarmTrialWin.msg = "Please turn off the VPN"
+            spinner.visible = false
         }else{
             var endpoint2 = Service.url_device + device_id + "/"
             Service.delete_item_nonsecure( endpoint2, function(resp, http) {})
-            print("You use trial version once before by using this email")
+            alarmTrialWin.msg = "You use trial version once before by using this email"
+            spinner.visible = false
         }
 
     }
@@ -155,7 +167,7 @@ ApplicationWindow{
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                             text: "Welcome to PoroX"
-                            color: "white"
+                            color: "black"
 
                             font.pixelSize: Qt.application.font.pixelSize * 2.2
                             horizontalAlignment: Qt.AlignHCenter
@@ -166,13 +178,14 @@ ApplicationWindow{
                             Layout.preferredHeight: 4
                             radius: 2
                             Layout.alignment: Qt.AlignHCenter
+                            color: "black"
                         }
 
                         Label{
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                             text: "Digital Rock Analysis Software"
-                            color: "white"
+                            color: "black"
 
                             font.pixelSize: Qt.application.font.pixelSize * 1.3
                             horizontalAlignment: Qt.AlignHCenter
@@ -269,9 +282,8 @@ ApplicationWindow{
                                         cursorShape: Qt.PointingHandCursor
 
                                         onClicked: {
+                                            spinner.visible = true
                                             MainPython.makeTrialData(15)
-                                            //-- clear msg box --//
-                                            alarmSignupWin.msg = ""
                                         }
                                     }
                                 }
@@ -322,6 +334,17 @@ ApplicationWindow{
 
                                 }
 
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 15}
+
+                                LoadingSpinner{
+                                    id: spinner
+                                    visible: false
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                    leftMarg: 60
+                                }
+
                                 //-- filler --//
                                 Item{Layout.fillHeight: true}
                             }
@@ -354,7 +377,7 @@ ApplicationWindow{
 
     //-- Alarm --//
     Rectangle{
-        id: alarmSignupWin
+        id: alarmTrialWin
 
         property string msg: ""
 
@@ -366,7 +389,7 @@ ApplicationWindow{
 
         Label{
             id: lblAlarm
-            text: alarmSignupWin.msg
+            text: alarmTrialWin.msg
             anchors.centerIn: parent
             color: "white"
 

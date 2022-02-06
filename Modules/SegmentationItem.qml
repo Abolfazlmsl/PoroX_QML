@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: segmentitem
@@ -44,7 +45,7 @@ Item {
             sceneset.source1 = ""
             sceneset.source1 = "file:///" + offlineStoragePath + "/main.stl"
 
-            if (!findbyNameBool(scene2dModel, "2D Segment")){
+            if (!Functions.findbyNameBool(scene2dModel, "2D Segment")){
                 scene2dModel.append(
                             {
                                 "name":"2D Segment",

@@ -32,50 +32,87 @@ ApplicationWindow{
     }
 
     onEnterKey: {
-        Service.get_all(Service.url_license , function(data, http){
-            //-- check ERROR --//
-            if(data.hasOwnProperty('error')) // chack exist error in resp
-            {
-                //                                    alarmLogin.msg = resp.error
-                alarmLoginWin.msg = "No internet connection"
-                return
-            }
-
-            //-- 400-Bad Request, 401-Unauthorized --//
-            //-- No active account found with the given credentials --//
-            if(http.status === 400 || http.status === 401 || data.hasOwnProperty('non_field_errors')){
-
-                //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
-                //                                    alarmLogin.msg = resp.non_field_errors.toString()
-                alarmLoginWin.msg = "Incorrect license key"
-                return
-            }
-
-            for (var i = 0; i < data.length; i++){
-                if (data[i].key === user.text){
-                    Service.get_all(Service.url_device , function(data2, http2){
-                        if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
-                            licenseData = data[i]
-                            MainPython.postDeviceSlot(mac)
-                            isLicensed = true
-                            root_auth.visible = false
-                            return
-                        }else if (data[i].deviceNumber > data[i].devices.length && isMacExist(data2, mac)){
-                            licenseData = data[i]
-                            updateLicenseInfo(getDeviceid(data2, mac))
-                            isLicensed = true
-                            root_auth.visible = false
-                            return
-                        }else if (data[i].deviceNumber === data[i].devices.length && isMacExist(data2, mac)){
-                            isLicensed = true
-                            root_auth.visible = false
-                            return
-                        }else{return}
-                    })
+        if (mac === "00:00:00:00:00:00"){
+            alarmLoginWin.msg = "Please turn off the VPN"
+            spinner.visible = false
+        }else{
+            Service.get_all(Service.url_license , function(data, http){
+                //-- check ERROR --//
+                if(data.hasOwnProperty('error')) // chack exist error in resp
+                {
+                    //                                    alarmLogin.msg = resp.error
+                    alarmLoginWin.msg = "No internet connection"
+                    spinner.visible = false
                     return
                 }
-            }
-        })
+
+                //-- 400-Bad Request, 401-Unauthorized --//
+                //-- No active account found with the given credentials --//
+                if(http.status === 400 || http.status === 401 || data.hasOwnProperty('non_field_errors')){
+
+                    //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
+                    //                                    alarmLogin.msg = resp.non_field_errors.toString()
+                    alarmLoginWin.msg = "Incorrect license key"
+                    spinner.visible = false
+                    return
+                }
+
+                for (var i = 0; i < data.length; i++){
+                    if (data[i].key === user.text){
+                        Service.get_all(Service.url_device , function(data2, http2){
+                            if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
+                                licenseData = data[i]
+                                MainPython.postDeviceSlot(mac)
+                                isLicensed = true
+                                licenseTime = data[i].expired_on
+                                licenseTime = licenseTime.replace("-","/")
+                                licenseTime = licenseTime.replace("-","/")
+                                licenseType = data[i].licenseType
+                                spinner.visible = false
+                                root_auth.visible = false
+                                successDynamicPop.messageText = "The license activated successfully"
+                                animationdynamicpop.restart()
+                                return
+                            }else if (data[i].deviceNumber > data[i].devices.length && isMacExist(data2, mac)){
+                                licenseData = data[i]
+                                updateLicenseInfo(getDeviceid(data2, mac))
+                                isLicensed = true
+                                licenseTime = data[i].expired_on
+                                licenseTime = licenseTime.replace("-","/")
+                                licenseTime = licenseTime.replace("-","/")
+                                licenseType = data[i].licenseType
+                                spinner.visible = false
+                                root_auth.visible = false
+                                successDynamicPop.messageText = "The license activated successfully"
+                                animationdynamicpop.restart()
+                                return
+                            }else if (data[i].deviceNumber === data[i].devices.length && isMacExist(data2, mac)){
+                                isLicensed = true
+                                licenseTime = data[i].expired_on
+                                licenseTime = licenseTime.replace("-","/")
+                                licenseTime = licenseTime.replace("-","/")
+                                licenseType = data[i].licenseType
+                                spinner.visible = false
+                                root_auth.visible = false
+                                successDynamicPop.messageText = "The license activated successfully"
+                                animationdynamicpop.restart()
+                                return
+                            }else{
+                                alarmLoginWin.msg = "The license can not be used on more devices"
+                                spinner.visible = false
+                                return
+                            }
+                        })
+                        return
+                    }
+                }
+                if (!isLicensed){
+                    alarmLoginWin.msg = "Invalid license key"
+                    spinner.visible = false
+                    return
+                }
+            })
+        }
     }
 
     signal updateLicenseInfo(var device_id)
@@ -182,7 +219,7 @@ ApplicationWindow{
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                             text: "Welcome to PoroX"
-                            color: "white"
+                            color: "black"
 
                             font.pixelSize: Qt.application.font.pixelSize * 2.2
                             horizontalAlignment: Qt.AlignHCenter
@@ -193,13 +230,14 @@ ApplicationWindow{
                             Layout.preferredHeight: 4
                             radius: 2
                             Layout.alignment: Qt.AlignHCenter
+                            color: "black"
                         }
 
                         Label{
                             Layout.fillWidth: true
                             Layout.preferredHeight: implicitHeight
                             text: "Digital Rock Analysis Software"
-                            color: "white"
+                            color: "black"
 
                             font.pixelSize: Qt.application.font.pixelSize * 1.3
                             horizontalAlignment: Qt.AlignHCenter
@@ -284,6 +322,7 @@ ApplicationWindow{
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
+                                    spinner.visible = true
                                     MainPython.enterLicense()
                                 }
                             }
@@ -333,6 +372,16 @@ ApplicationWindow{
                                 }
                             }
 
+                        }
+
+                        //-- spacer --//
+                        Item{Layout.preferredHeight: 15}
+
+                        LoadingSpinner{
+                            id: spinner
+                            visible: false
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: implicitHeight
                         }
 
                         //-- filler --//

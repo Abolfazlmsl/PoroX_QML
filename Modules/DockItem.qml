@@ -5,6 +5,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.3
 import QtGraphicalEffects 1.0
 
+import "./../Functions/functions.js" as Functions
+
 Rectangle{
     id: dock_list
     color: "#f8f8ff"
@@ -394,7 +396,7 @@ Rectangle{
                             text: "PSD (Image)"
                             onCheckStateChanged: {
                                 if (psdImage){
-                                    curvemodel.remove(find(curvemodel, "PSD (Image)"))
+                                    curvemodel.remove(Functions.find(curvemodel, "PSD (Image)"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -411,7 +413,7 @@ Rectangle{
                             text: "GSD (Image)"
                             onCheckStateChanged: {
                                 if (gsdImage){
-                                    curvemodel.remove(find(curvemodel, "GSD (Image)"))
+                                    curvemodel.remove(Functions.find(curvemodel, "GSD (Image)"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -428,7 +430,7 @@ Rectangle{
                             text: "S2"
                             onCheckStateChanged: {
                                 if (s2){
-                                    curvemodel.remove(find(curvemodel, "S2"))
+                                    curvemodel.remove(Functions.find(curvemodel, "S2"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -444,7 +446,7 @@ Rectangle{
                             text: "PSD (Network)"
                             onCheckStateChanged: {
                                 if (psdnetwork){
-                                    curvemodel.remove(find(curvemodel, "PSD (Network)"))
+                                    curvemodel.remove(Functions.find(curvemodel, "PSD (Network)"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -460,7 +462,7 @@ Rectangle{
                             text: "TSD (Network)"
                             onCheckStateChanged: {
                                 if (tsdnetwork){
-                                    curvemodel.remove(find(curvemodel, "TSD (Network)"))
+                                    curvemodel.remove(Functions.find(curvemodel, "TSD (Network)"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -476,7 +478,7 @@ Rectangle{
                             text: "Coordination number"
                             onCheckStateChanged: {
                                 if (coord){
-                                    curvemodel.remove(find(curvemodel, "Coordination number"))
+                                    curvemodel.remove(Functions.find(curvemodel, "Coordination number"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -492,7 +494,7 @@ Rectangle{
                             text: "Capillary pressure"
                             onCheckStateChanged: {
                                 if (cp){
-                                    curvemodel.remove(find(curvemodel, "Capillary pressure"))
+                                    curvemodel.remove(Functions.find(curvemodel, "Capillary pressure"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -508,7 +510,7 @@ Rectangle{
                             text: "Relative permeability"
                             onCheckStateChanged: {
                                 if (kr){
-                                    curvemodel.remove(find(curvemodel, "Relative permeability"))
+                                    curvemodel.remove(Functions.find(curvemodel, "Relative permeability"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({
@@ -524,7 +526,7 @@ Rectangle{
                             text: "Relative diffusivity"
                             onCheckStateChanged: {
                                 if (dr){
-                                    curvemodel.remove(find(curvemodel, "Relative diffusivity"))
+                                    curvemodel.remove(Functions.find(curvemodel, "Relative diffusivity"))
                                     bar_main.currentIndex = curvemodel.count - 1
                                 }else{
                                     curvemodel.append({

@@ -2,6 +2,8 @@ import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
+import "./../Functions/functions.js" as Functions
+
 Rectangle {
     id: propertiesmenu
 
@@ -231,7 +233,7 @@ Rectangle {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
-                    checkprops()
+                    Functions.checkprops()
                     isHelpOn = true
                 }
             }

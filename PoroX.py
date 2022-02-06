@@ -112,7 +112,7 @@ class Main(QObject):
 
     macData = Signal(str)
     device_id = Signal(int)
-    trialData = Signal(int, list, str)
+    trialData = Signal(int, list, str, bool)
     timeLimitData = Signal(str)
     newFile = Signal()
     saveFile = Signal()
@@ -172,8 +172,13 @@ class Main(QObject):
         mac = self.getMacAddress()
         device_id, keyData = self.postDevice(mac)
         date = self.getExpiredDate(time)
-                                   
-        self.trialData.emit(device_id, keyData, date)
+
+        if (mac == "00:00:00:00:00:00"):
+            vpn = True
+        else:
+            vpn = False
+
+        self.trialData.emit(device_id, keyData, date, vpn)
 
     @Slot(int)
     def makeLicenseKey(self, time):
@@ -185,7 +190,7 @@ class Main(QObject):
         return mac
     
     def getExpiredDate(self, time):
-        date = datetime.datetime.now() - datetime.timedelta(time)
+        date = datetime.datetime.now() + datetime.timedelta(time)
         return date.strftime('%Y-%m-%d')
 
     def postDevice(self, mac):

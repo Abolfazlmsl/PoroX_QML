@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: denoiseitem
@@ -39,7 +40,7 @@ Item {
                                         })
             }
 
-            if (!findbyName(scene2dModel, "2D Denoise")){
+            if (!Functions.findbyName(scene2dModel, "2D Denoise")){
                 scene2dModel.append(
                             {
                                 "name":"2D Denoise",

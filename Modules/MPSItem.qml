@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.12
 
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: mpsitem
@@ -47,7 +48,7 @@ Item {
             }
         }
 
-        if (!findbyNameBool(sceneModel, "3D Reconstruct")){
+        if (!Functions.findbyNameBool(sceneModel, "3D Reconstruct")){
             sceneModel.append(
                         {
                             "name":"3D Reconstruct",
@@ -56,7 +57,7 @@ Item {
                         )
         }
 
-        if (!findbyNameBool(scene2dModel, "2D Reconstruct")){
+        if (!Functions.findbyNameBool(scene2dModel, "2D Reconstruct")){
             scene2dModel.append(
                         {
                             "name":"2D Reconstruct",

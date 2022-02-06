@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.3
 
 import "./../Fonts/Icon.js" as Icons
+import "./../Functions/functions.js" as Functions
 
 Item {
     id: poreitem
@@ -195,13 +196,13 @@ Item {
                                     diamopen = !diamopen
                                     porediamType = ""
 
-                                    var index = findprops(geometrymodel, "Pore diameter")
+                                    var index = Functions.findprops(geometrymodel, "Pore diameter")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "pore.diameter")
+                                var index = Functions.find(helpmodel, "pore.diameter")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", porediam)
                                 }
@@ -391,13 +392,13 @@ Item {
                                                          })
                                 }else{
                                     poreseedType = ""
-                                    var index = findprops(geometrymodel, "Pore seed")
+                                    var index = Functions.findprops(geometrymodel, "Pore seed")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "pore.seed")
+                                var index = Functions.find(helpmodel, "pore.seed")
                                 if (index !== null){
                                     helpmodel.setProperty(index, "check", poreseed)
                                 }
@@ -564,13 +565,13 @@ Item {
                                                          })
                                 }else{
                                     poresurfType = ""
-                                    var index = findprops(geometrymodel, "Pore surface area")
+                                    var index = Functions.findprops(geometrymodel, "Pore surface area")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "pore.surface area")
+                                var index = Functions.find(helpmodel, "pore.surface area")
                                 if (index!==null){
                                     helpmodel.setProperty(index, "check", poresurf)
                                 }
@@ -684,13 +685,13 @@ Item {
                                                          })
                                 }else{
                                     porevolType = ""
-                                    var index = findprops(geometrymodel, "Pore volume")
+                                    var index = Functions.findprops(geometrymodel, "Pore volume")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "pore.volume")
+                                var index = Functions.find(helpmodel, "pore.volume")
                                 if (index!== null){
                                     helpmodel.setProperty(index, "check", porevol)
                                 }
@@ -798,13 +799,13 @@ Item {
                                                          })
                                 }else{
                                     poreareaType = ""
-                                    var index = findprops(geometrymodel, "Pore area")
+                                    var index = Functions.findprops(geometrymodel, "Pore area")
                                     if(index !== null){
                                         geometrymodel.remove(index)
                                     }
                                 }
 
-                                var index = find(helpmodel, "pore.area")
+                                var index = Functions.find(helpmodel, "pore.area")
                                 if(index !== null){
                                     helpmodel.setProperty(index, "check", porearea)
                                 }
@@ -853,32 +854,32 @@ Item {
     }
 
     function porediamChange(){
-        var index = findprops(geometrymodel, "Pore diameter")
+        var index = Functions.findprops(geometrymodel, "Pore diameter")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Pore diameter" + " (" + porediamType + ")")
         }
     }
 
     function poreseedChange(){
-        var index = findprops(geometrymodel, "Pore seed")
+        var index = Functions.findprops(geometrymodel, "Pore seed")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Pore seed" + " (" + poreseedType + ")")
         }
     }
     function poresurfChange(){
-        var index = findprops(geometrymodel, "Pore surface area")
+        var index = Functions.findprops(geometrymodel, "Pore surface area")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Pore surface area" + " (" + poresurfType + ")")
         }
     }
     function porevolChange(){
-        var index = findprops(geometrymodel, "Pore volume")
+        var index = Functions.findprops(geometrymodel, "Pore volume")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Pore volume" + " (" + porevolType + ")")
         }
     }
     function poreareaChange(){
-        var index = findprops(geometrymodel, "Pore area")
+        var index = Functions.findprops(geometrymodel, "Pore area")
         if(index !== null){
             geometrymodel.setProperty(index, "proptext", "Pore area" + " (" + poreareaType + ")")
         }
