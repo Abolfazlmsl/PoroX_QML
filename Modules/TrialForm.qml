@@ -44,7 +44,7 @@ ApplicationWindow{
             }
             var endpoint = Service.url_license
 
-            Service.create_item_notsecure( endpoint, licenseData, function(resp, http) {
+            Service.create_item(tokenAccess, endpoint, licenseData, function(resp, http) {
                 //-- check ERROR --//
                 if(resp.hasOwnProperty('error')) // chack exist error in resp
                 {
@@ -77,12 +77,12 @@ ApplicationWindow{
             spinner.visible = false
         }else if (vpn){
             var endpoint2 = Service.url_device + device_id + "/"
-            Service.delete_item_nonsecure( endpoint2, function(resp, http) {})
+            Service.delete_item(tokenAccess, endpoint2, function(resp, http) {})
             alarmTrialWin.msg = "Please turn off the VPN"
             spinner.visible = false
         }else{
             var endpoint2 = Service.url_device + device_id + "/"
-            Service.delete_item_nonsecure( endpoint2, function(resp, http) {})
+            Service.delete_item(tokenAccess, endpoint2, function(resp, http) {})
             alarmTrialWin.msg = "You use trial version once before by using this email"
             spinner.visible = false
         }
@@ -283,7 +283,7 @@ ApplicationWindow{
 
                                         onClicked: {
                                             spinner.visible = true
-                                            MainPython.makeTrialData(15)
+                                            MainPython.makeTrialData(15, tokenAccess)
                                         }
                                     }
                                 }

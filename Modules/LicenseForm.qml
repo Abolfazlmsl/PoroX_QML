@@ -36,7 +36,7 @@ ApplicationWindow{
             alarmLoginWin.msg = "Please turn off the VPN"
             spinner.visible = false
         }else{
-            Service.get_all(Service.url_license , function(data, http){
+            Service.get_with_token(tokenAccess, Service.url_license , function(data, http){
                 //-- check ERROR --//
                 if(data.hasOwnProperty('error')) // chack exist error in resp
                 {
@@ -59,15 +59,16 @@ ApplicationWindow{
 
                 for (var i = 0; i < data.length; i++){
                     if (data[i].key === user.text){
-                        Service.get_all(Service.url_device , function(data2, http2){
+                        Service.get_with_token(tokenAccess, Service.url_device , function(data2, http2){
                             if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
                                 licenseData = data[i]
-                                MainPython.postDeviceSlot(mac)
-                                isLicensed = true
-                                licenseTime = data[i].expired_on
+                                MainPython.postDeviceSlot(mac, tokenAccess)
+                                setting.isLicensed = true
+                                var licenseTime = data[i].expired_on
                                 licenseTime = licenseTime.replace("-","/")
-                                licenseTime = licenseTime.replace("-","/")
-                                licenseType = data[i].licenseType
+                                setting.licenseTime = licenseTime.replace("-","/")
+                                setting.licenseType = data[i].licenseType
+                                setting.licenseEmail = data[i].email
                                 spinner.visible = false
                                 root_auth.visible = false
                                 successDynamicPop.messageText = "The license activated successfully"
@@ -76,22 +77,24 @@ ApplicationWindow{
                             }else if (data[i].deviceNumber > data[i].devices.length && isMacExist(data2, mac)){
                                 licenseData = data[i]
                                 updateLicenseInfo(getDeviceid(data2, mac))
-                                isLicensed = true
-                                licenseTime = data[i].expired_on
+                                setting.isLicensed = true
+                                var licenseTime = data[i].expired_on
                                 licenseTime = licenseTime.replace("-","/")
-                                licenseTime = licenseTime.replace("-","/")
-                                licenseType = data[i].licenseType
+                                setting.licenseTime = licenseTime.replace("-","/")
+                                setting.licenseType = data[i].licenseType
+                                setting.licenseEmail = data[i].email
                                 spinner.visible = false
                                 root_auth.visible = false
                                 successDynamicPop.messageText = "The license activated successfully"
                                 animationdynamicpop.restart()
                                 return
                             }else if (data[i].deviceNumber === data[i].devices.length && isMacExist(data2, mac)){
-                                isLicensed = true
-                                licenseTime = data[i].expired_on
+                                setting.isLicensed = true
+                                var licenseTime = data[i].expired_on
                                 licenseTime = licenseTime.replace("-","/")
-                                licenseTime = licenseTime.replace("-","/")
-                                licenseType = data[i].licenseType
+                                setting.licenseTime = licenseTime.replace("-","/")
+                                setting.licenseType = data[i].licenseType
+                                setting.licenseEmail = data[i].email
                                 spinner.visible = false
                                 root_auth.visible = false
                                 successDynamicPop.messageText = "The license activated successfully"
@@ -106,7 +109,7 @@ ApplicationWindow{
                         return
                     }
                 }
-                if (!isLicensed){
+                if (!setting.isLicensed){
                     alarmLoginWin.msg = "Invalid license key"
                     spinner.visible = false
                     return
@@ -129,7 +132,7 @@ ApplicationWindow{
         }
 
         var endpoint = Service.url_license + licenseData.id + "/"
-        Service.update_item_notsecure(endpoint, newLicenseData, function(resp, http) {})
+        Service.update_item(tokenAccess, endpoint, newLicenseData, function(resp, http) {})
     }
 
     Component.onCompleted: {

@@ -167,10 +167,10 @@ class Main(QObject):
         mac = self.getMacAddress()
         self.macData.emit(mac)
 
-    @Slot(int)
-    def makeTrialData(self, time):
+    @Slot(int, str)
+    def makeTrialData(self, time, token):
         mac = self.getMacAddress()
-        device_id, keyData = self.postDevice(mac)
+        device_id, keyData = self.postDevice(mac, token)
         date = self.getExpiredDate(time)
 
         if (mac == "00:00:00:00:00:00"):
@@ -193,9 +193,13 @@ class Main(QObject):
         date = datetime.datetime.now() + datetime.timedelta(time)
         return date.strftime('%Y-%m-%d')
 
-    def postDevice(self, mac):
-        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac})
-        l = requests.get(self.Base+"license/license/")
+    def postDevice(self, mac, myToken):
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer '+ myToken,
+        }
+        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac}, headers=headers)
+        l = requests.get(self.Base+"license/license/", headers=headers)
 
         try:
             return r.json()['id'], l.json()
@@ -204,7 +208,11 @@ class Main(QObject):
     
     @Slot(str)
     def postDeviceSlot(self, mac):
-        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac})
+        headers = {
+            'accept': 'application/json',
+            'Authorization': 'Bearer '+ myToken,
+        }
+        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac}, headers=headers)
         self.device_id.emit(r.json()['id'])
      
         

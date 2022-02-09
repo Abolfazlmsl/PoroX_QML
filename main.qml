@@ -23,26 +23,21 @@ Window {
     height: Screen.height*0.85
     title: qsTr("PoroX")
 
+    property string hostPhoneNumber: "09114113874"
+    property string hostPassword: "#3EdFgdgs435@##$5453fgEWR$$#@"
+    property string tokenAccess: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ0NDI3OTc1LCJqdGkiOiJjMmYxNzUwYTgxYzI0ZWM0ODk4MTEzYTU5M2ZmYTdmMSIsInVzZXJfaWQiOjF9.fWJVrQvWmG3sReZSO17WVgdolicAA4griWeBxcO2Og0"
+    property string tokenRefresh: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY0NDQ3ODM3NSwianRpIjoiN2MzNTI4MDliZTUwNDEyYThhNmY5ZjIzZDYwMWRiZTYiLCJ1c2VyX2lkIjoxfQ.OPdCx-Fb6jESlEZRDg8pfOdyY_1YoQeGlcq93kuyuAg"
+
     //-- save app setting --//
     property var setting: Settings{
         id: setting
 
         //license properties
         property bool isLicensed: false
+        property string licenseEmail: ""
         property string licenseTime: ""
         property string licenseType: ""
-
-        property string username: ""
-        property string password: ""
-        property string token_access: ""
-        property string token_refresh: ""
-        property bool   isRemember
-
     }
-
-    property bool isLicensed: false
-    property string licenseTime: ""
-    property string licenseType: ""
 
     signal showLogin()
     signal showTrial()
@@ -75,8 +70,8 @@ Window {
         MainPython.openFile.connect(getOpenfile)
         MainPython.saveFile.connect(getSaveFileSignal)
         MainPython.newFile.connect(getNewFileSignal)
-        if (isLicensed){
-            Functions.remainingLicenseTime(licenseTime)
+        if (setting.isLicensed){
+            Functions.remainingLicenseTime(setting.licenseTime)
         }
     }
 
@@ -959,34 +954,49 @@ Window {
                 color: "transparent"
             }
 
-            ColumnLayout{
+            Rectangle{
                 Layout.preferredWidth: parent.width * 0.1
                 Layout.fillHeight: true
-                Label{
-                    id: licenseTimeText
-                    visible: (licenseTime === "") ? false:true
-                    width: parent.width
-                    height: parent.height / 2
-                    text: "License validity: " + licenseTime
-                    font.pixelSize: Qt.application.font.pixelSize * 0.9
-                    verticalAlignment: Qt.AlignVCenter
-                    color: "green"
+                color: "transparent"
+                visible: (setting.licenseTime === "") ? false:true
+                ColumnLayout{
+                    anchors.fill: parent
+                    Label{
+                        id: licenseTimeText
+                        width: parent.width
+                        height: parent.height / 2
+                        text: "License validity: " + setting.licenseTime
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
+                        verticalAlignment: Qt.AlignVCenter
+                        color: "green"
+                    }
+                    Label{
+                        id: licenseTypeText
+                        width: parent.width
+                        height: parent.height / 2
+                        text: "License type: " + setting.licenseType
+                        font.pixelSize: Qt.application.font.pixelSize * 0.9
+                        verticalAlignment: Qt.AlignVCenter
+                        color: "green"
+                    }
                 }
-                Label{
-                    id: licenseTypeText
-                    visible: (licenseType === "") ? false:true
-                    width: parent.width
-                    height: parent.height / 2
-                    text: "License type: " + licenseType
-                    font.pixelSize: Qt.application.font.pixelSize * 0.9
-                    verticalAlignment: Qt.AlignVCenter
-                    color: "green"
+                MouseArea{
+                    anchors.fill: parent
+                    onEntered: {
+                        cursorShape = Qt.PointingHandCursor
+                    }
+                    onExited: {
+                        cursorShape = Qt.ArrowCursor
+                    }
+                    onClicked: {
+                        license_Dataform.visible = true
+                    }
                 }
             }
         }
         Rectangle{
             id: softBars
-            enabled: isLicensed //Enabled by license
+            enabled: setting.isLicensed //Enabled by license
             width: parent.width
             height: 0
             anchors.top: header_tab.bottom
@@ -3300,7 +3310,7 @@ Window {
     LicenseForm{
         id: licenseform
 
-        visible: !isLicensed
+        visible: !setting.isLicensed
 
         //flags: Qt.Dialog //SplashScreen //Dialog
 
@@ -3326,6 +3336,31 @@ Window {
 
     }
 
+    //-- License Data form --//
+    property var licenseData: ApplicationWindow{
+        id: license_Dataform
+
+        title: "License Data"
+        visible: false
+        width: 400
+        height: 500
+        minimumWidth: 400
+        maximumWidth: 400
+        minimumHeight: 500
+        maximumHeight: 500
+
+        //flags: Qt.Dialog //SplashScreen //Dialog
+
+        Material.theme: Material.Dark
+
+//        background: Rectangle{ color: "#535353" }
+
+        LicenseDataForm{
+            id: licenseDataform
+            anchors.fill: parent
+        }
+
+    }
 
     //-- 2D image setting --//
     property var image2d_filter: ApplicationWindow{
@@ -3611,7 +3646,7 @@ Window {
         id: fileSave2
         visible: false
         //        title: "Please choose a folder"
-        //        folder: shortcuts.home
+        //                folder: shortcuts.home
         nameFilters: [ "PoroX files (*.prx)", "All files (*)" ]
         fileMode: FileDialog.SaveFile
 

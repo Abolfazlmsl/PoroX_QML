@@ -21,7 +21,7 @@ Rectangle{
         ButtonPanel{
             id: btnDashboard
 
-            enabled: isLicensed
+            enabled: setting.isLicensed
             Layout.fillWidth: true
             Layout.preferredHeight: 45 * ratio
 
@@ -38,7 +38,7 @@ Rectangle{
         ButtonPanel{
             id: btnLearn
 
-            enabled: isLicensed
+            enabled: setting.isLicensed
             Layout.fillWidth: true
             Layout.preferredHeight: 45 * ratio
 

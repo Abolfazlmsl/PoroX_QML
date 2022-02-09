@@ -19,10 +19,6 @@ function get_data(token, endpoint, entry, cb) {
     request(token, 'GET', endpoint, entry, cb)
 }
 
-function create_item_notsecure(endpoint, entry, cb) {
-    request(null, 'POST', endpoint, entry, cb)
-}
-
 function refresh(token, endpoint, entry, cb) {
     request(token, 'POST', endpoint, entry, cb)
 }
@@ -39,16 +35,8 @@ function get_item(name, cb) {
     request(null, 'GET', name, null, cb)
 }
 
-function update_item_notsecure(name, entry, cb) {
-    request(null, 'PUT', name, entry, cb)
-}
-
 function update_item(token, name, entry, cb) {
     request(token, 'PUT', name, entry, cb)
-}
-
-function delete_item_nonsecure(name, cb) {
-    request(null, 'DELETE', name, null, cb)
 }
 
 function delete_item(token, name, cb) {
