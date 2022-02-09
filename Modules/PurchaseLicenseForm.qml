@@ -36,7 +36,7 @@ ApplicationWindow{
         }
         var endpoint = Service.url_license
 
-        Service.create_item(tokenAccess, endpoint, licenseData, function(resp, http) {
+        Service.create_item(setting.tokenAccess, endpoint, licenseData, function(resp, http) {
             //-- check ERROR --//
             if(resp.hasOwnProperty('error')) // chack exist error in resp
             {

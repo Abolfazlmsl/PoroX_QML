@@ -13,7 +13,6 @@ import Qt.labs.settings 1.1
 
 import "./Modules"
 import "./Functions/functions.js" as Functions
-import "./REST/apiService.js" as Service
 import "./Fonts/Icon.js" as Icons
 
 Window {
@@ -26,6 +25,8 @@ Window {
 
     property string hostPhoneNumber: "09114113874"
     property string hostPassword: "#3EdFgdgs435@##$5453fgEWR$$#@"
+    property string tokenAccess: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ0NDI3OTc1LCJqdGkiOiJjMmYxNzUwYTgxYzI0ZWM0ODk4MTEzYTU5M2ZmYTdmMSIsInVzZXJfaWQiOjF9.fWJVrQvWmG3sReZSO17WVgdolicAA4griWeBxcO2Og0"
+    property string tokenRefresh: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY0NDQ3ODM3NSwianRpIjoiN2MzNTI4MDliZTUwNDEyYThhNmY5ZjIzZDYwMWRiZTYiLCJ1c2VyX2lkIjoxfQ.OPdCx-Fb6jESlEZRDg8pfOdyY_1YoQeGlcq93kuyuAg"
 
     //-- save app setting --//
     property var setting: Settings{
@@ -36,8 +37,6 @@ Window {
         property string licenseEmail: ""
         property string licenseTime: ""
         property string licenseType: ""
-        property string tokenAccess: ""
-        property string tokenRefresh: ""
     }
 
     signal showLogin()
@@ -73,17 +72,6 @@ Window {
         MainPython.newFile.connect(getNewFileSignal)
         if (setting.isLicensed){
             Functions.remainingLicenseTime(setting.licenseTime)
-        }
-        if (setting.tokenAccess === ""){
-            var data = {
-                "phone_number": hostPhoneNumber,
-                "password": hostPassword
-            }
-
-            Service.verify(Service.url_token, data, function(resp, http){
-                setting.tokenAccess = resp.access
-                setting.tokenRefresh = resp.refresh
-            })
         }
     }
 

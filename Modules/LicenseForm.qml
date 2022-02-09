@@ -36,7 +36,7 @@ ApplicationWindow{
             alarmLoginWin.msg = "Please turn off the VPN"
             spinner.visible = false
         }else{
-            Service.get_with_token(tokenAccess, Service.url_license , function(data, http){
+            Service.get_with_token(setting.tokenAccess, Service.url_license , function(data, http){
                 //-- check ERROR --//
                 if(data.hasOwnProperty('error')) // chack exist error in resp
                 {
@@ -59,10 +59,10 @@ ApplicationWindow{
 
                 for (var i = 0; i < data.length; i++){
                     if (data[i].key === user.text){
-                        Service.get_with_token(tokenAccess, Service.url_device , function(data2, http2){
+                        Service.get_with_token(setting.tokenAccess, Service.url_device , function(data2, http2){
                             if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
                                 licenseData = data[i]
-                                MainPython.postDeviceSlot(mac, tokenAccess)
+                                MainPython.postDeviceSlot(mac, setting.tokenAccess)
                                 setting.isLicensed = true
                                 var licenseTime = data[i].expired_on
                                 licenseTime = licenseTime.replace("-","/")
@@ -132,7 +132,7 @@ ApplicationWindow{
         }
 
         var endpoint = Service.url_license + licenseData.id + "/"
-        Service.update_item(tokenAccess, endpoint, newLicenseData, function(resp, http) {})
+        Service.update_item(setting.tokenAccess, endpoint, newLicenseData, function(resp, http) {})
     }
 
     Component.onCompleted: {
