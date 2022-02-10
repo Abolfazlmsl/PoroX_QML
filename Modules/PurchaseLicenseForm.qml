@@ -7,7 +7,6 @@ import QtGraphicalEffects 1.0
 
 import "./../Fonts/Icon.js" as Icons
 import "./../REST/apiService.js" as Service
-//import "./../../Utils/CheckRegisterValidation.js" as RegiserValidation
 
 ApplicationWindow{
     id: root_register
@@ -16,16 +15,17 @@ ApplicationWindow{
     property real timeLimit: 30
     property real numberOfDevices: 1
     property string gender  : ""
+    property int price: 1000000
+
+    property var prices: [1000000, 2800000, 5400000, 10000000]
 
     property alias swipeIndex: swipe_register.currentIndex
-
 
     onClosing: {
         email.text = ""
     }
 
     signal registe(var date)
-    //    property bool checkRegisterValidation : RegiserValidation.checkValidation(mobile.text , email.text , name.text , gender , pass.text , c_pass.text)
 
     onRegiste: {
         var licenseData = {
@@ -50,20 +50,34 @@ ApplicationWindow{
             //-- No active account found with the given credentials --//
             if(http.status === 400 || http.status === 401 || resp.hasOwnProperty('non_field_errors')){
 
-                //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
-                //                                    alarmLogin.msg = resp.non_field_errors.toString()
                 alarmSignupWin.msg = "Incorrect entered informations"
                 spinner.visible = false
                 return
             }
-//            var msg = "Thank you for purchasing the PoroX software license"
-//            MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
+            var msg = "Thank you for purchasing the PoroX software license"
+            MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
             spinner.visible = false
             root_register.visible = false
             successDynamicPop.messageText = "The license was sent to your email"
             animationdynamicpop.restart()
         })
 
+    }
+
+    function priceCount(){
+        price = parseInt(input_device.currentIndex+1) * prices[parseInt(input_time.currentIndex)]
+    }
+
+    function numberWithCommas(nStr) {
+        nStr += '';
+        var x = nStr.split('.');
+        var x1 = x[0];
+        var x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+        return x1 + x2;
     }
 
     Component.onCompleted: MainPython.timeLimitData.connect(registe)
@@ -242,7 +256,7 @@ ApplicationWindow{
                                 }
 
                                 //-- spacer --//
-                                Item{Layout.preferredHeight: 10}
+                                Item{Layout.preferredHeight: 5}
 
                                 //-- Time --//
                                 RowLayout{
@@ -267,10 +281,11 @@ ApplicationWindow{
                                             id: model
                                             ListElement { text: "30 days" }
                                             ListElement { text: "90 days" }
-                                            ListElement { text: "120 days" }
+                                            ListElement { text: "180 days" }
                                             ListElement { text: "360 days" }
                                         }
                                         onActivated: {
+                                            priceCount()
                                             if (input_time.currentIndex === 0){
                                                 timeLimit = 30
                                             }else if (input_time.currentIndex === 1){
@@ -285,7 +300,7 @@ ApplicationWindow{
                                 }
 
                                 //-- spacer --//
-                                Item{Layout.preferredHeight: 10}
+                                Item{Layout.preferredHeight: 5}
 
                                 //-- Devices --//
                                 RowLayout{
@@ -314,6 +329,7 @@ ApplicationWindow{
                                             ListElement { text: "4" }
                                         }
                                         onActivated: {
+                                            priceCount()
                                             if (input_device.currentIndex === 0){
                                                 numberOfDevices = 1
                                             }else if (input_device.currentIndex === 1){
@@ -325,6 +341,20 @@ ApplicationWindow{
                                             }
                                         }
                                     }
+
+                                }
+
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 5}
+
+                                Label{
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                    text: "Price: " + numberWithCommas(price) +" IRR"
+                                    color: "black"
+
+                                    font.pixelSize: Qt.application.font.pixelSize * 1.5
+                                    horizontalAlignment: Qt.AlignHCenter
 
                                 }
 
@@ -432,20 +462,6 @@ ApplicationWindow{
 
 
     }
-
-    //    Alarm_Popup{
-    //        id: alarm_popup
-
-    //        x: (root_register.width / 2) - (width / 2)
-    //        y: (root_register.height / 2) - (height / 2)
-
-    //        onOk_Click: {
-
-    //            alarm_popup.close()
-    //            if(alarm_popup.closeMode)
-    //                root_register.close()
-    //        }
-    //    }
 
     //-- Alarm --//
     Rectangle{

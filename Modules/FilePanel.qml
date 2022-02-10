@@ -101,6 +101,7 @@ Rectangle{
 
             onBtnClicked: {
                 licenseform.visible = true
+                leftfilepanel.restart()
             }
 
         }

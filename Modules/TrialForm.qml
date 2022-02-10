@@ -64,8 +64,8 @@ ApplicationWindow{
                     spinner.visible = false
                     return
                 }
-//                var msg = "Thank you for installing the PoroX software"
-//                MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
+                var msg = "Thank you for installing the PoroX software"
+                MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber)
                 spinner.visible = false
                 root_register.visible = false
                 successDynamicPop.messageText = "The license was sent to your email"

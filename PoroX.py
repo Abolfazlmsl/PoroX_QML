@@ -54,6 +54,7 @@ import requests
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import smtplib
+import ssl
 
 application_path = (
     sys._MEIPASS
@@ -205,9 +206,9 @@ class Main(QObject):
             return r.json()['id'], l.json()
         except:
             return -1, []
-    
-    @Slot(str)
-    def postDeviceSlot(self, mac):
+
+    @Slot(str, str)
+    def postDeviceSlot(self, mac, myToken):
         headers = {
             'accept': 'application/json',
             'Authorization': 'Bearer '+ myToken,
@@ -215,25 +216,30 @@ class Main(QObject):
         r = requests.post(self.Base+"license/device/", json={"deviceMac": mac}, headers=headers)
         self.device_id.emit(r.json()['id'])
      
-        
     @Slot(str, str, str, str)
     def sendEmail(self, message, email, key, serial):
+        worker = Mythread_function_3(self.sendEmail_th, message, email, key, serial)
+        self.threadpool.start(worker)
+
+    @Slot(str, str, str, str)
+    def sendEmail_th(self, message, email, key, serial):
         msg = MIMEMultipart()
 
-        password = "Abol7474"
-        msg['From'] = "abolfazlmoslemipoor@gmail.com"
+        password = "3@#abmsl@"
+        msg['From'] = "poroxsoftware@gmail.com"
         msg['To'] = email
         msg['Subject'] = "PoroX license"
 
         message = message + "\nYour license key: " + key + "\nYour serial number: " + serial
         msg.attach( MIMEText(message, 'plain') )
 
-        server = smtplib.SMTP(host='smtp.gmail.com', port=25)
-        server.starttls()
+        context = ssl.create_default_context()
+        server = smtplib.SMTP_SSL(host='smtp.gmail.com', port=465, context=context)
+        #server.starttls()
 
         server.login(msg['From'], password)
 
-        server.sendmail( msg['From'], msg['To'], msg.as_string() )
+        server.sendmail(msg['From'], msg['To'], msg.as_string())
 
         server.quit()
         

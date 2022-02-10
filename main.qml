@@ -28,7 +28,7 @@ Window {
     property string hostPassword: "#3EdFgdgs435@##$5453fgEWR$$#@"
 
     //-- save app setting --//
-    property var setting: Settings{
+    property var mainSetting: Settings{
         id: setting
 
         //license properties
@@ -74,17 +74,8 @@ Window {
         if (setting.isLicensed){
             Functions.remainingLicenseTime(setting.licenseTime)
         }
-        if (setting.tokenAccess === ""){
-            var data = {
-                "phone_number": hostPhoneNumber,
-                "password": hostPassword
-            }
 
-            Service.verify(Service.url_token, data, function(resp, http){
-                setting.tokenAccess = resp.access
-                setting.tokenRefresh = resp.refresh
-            })
-        }
+        checkToken(function(resp){})
     }
 
     signal getNewFileSignal()
@@ -970,9 +961,9 @@ Window {
                 Layout.preferredWidth: parent.width * 0.1
                 Layout.fillHeight: true
                 color: "transparent"
-                visible: (setting.licenseTime === "") ? false:true
                 ColumnLayout{
                     anchors.fill: parent
+                    visible: (setting.licenseTime === "") ? false:true
                     Label{
                         id: licenseTimeText
                         width: parent.width
@@ -991,17 +982,17 @@ Window {
                         verticalAlignment: Qt.AlignVCenter
                         color: "green"
                     }
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onEntered: {
-                        cursorShape = Qt.PointingHandCursor
-                    }
-                    onExited: {
-                        cursorShape = Qt.ArrowCursor
-                    }
-                    onClicked: {
-                        license_Dataform.visible = true
+                    MouseArea{
+                        anchors.fill: parent
+                        onEntered: {
+                            cursorShape = Qt.PointingHandCursor
+                        }
+                        onExited: {
+                            cursorShape = Qt.ArrowCursor
+                        }
+                        onClicked: {
+                            license_Dataform.visible = true
+                        }
                     }
                 }
             }
@@ -3895,4 +3886,124 @@ Window {
         }
 
     }
+
+    //-- referesh token --//
+    function refereshToken(cb){
+
+        var data = {
+            'refresh': setting.tokenRefresh
+        }
+
+        var endpoint = "api/token/refresh/"
+
+        Service.verify( endpoint, data, function(resp, http) {
+            //-- check ERROR --//
+            if(resp.hasOwnProperty('error')) // chack exist error in resp
+            {
+                if(cb) cb(false)
+                return false
+            }
+
+            //-- 200- OK --//
+            if(http.status === 200 || resp.hasOwnProperty('access')){
+
+                //                log("Unauthorized; " + resp.detail.toString())
+                //                alarmLogin.msg = resp.detail.toString()
+
+                //-- refresh token --//
+                setting.tokenAccess = resp.access
+                console.log("new access token refreshed")
+                if(cb) cb(true)
+                return true
+            }
+
+            console.log("new access token was not refreshed")
+            if(cb) cb(false)
+            return false
+
+        })
+
+    }
+
+    //-- verify token (referesh/access) --//
+    function verifyToken(token, cb){
+
+
+        var data = {
+            'token': token //tokenRefresh //tokenAccess
+        }
+
+        var endpoint = "api/token/verify/"
+
+        Service.verify( endpoint, data, function(resp, http) {
+            //-- check ERROR --//
+            if(resp.hasOwnProperty('error')) // chack exist error in resp
+            {
+                if(cb) cb(false)
+                return
+            }
+
+            //-- 401- Unauthorized --//
+            if(http.status === 401 || http.status === 400 || resp.hasOwnProperty('detail')){
+                if(cb) cb(false)
+                return
+            }
+
+            if(cb) cb(true)
+            return
+
+        })
+
+    }
+
+    //-- check token --//
+    function checkToken(cb){
+
+        //-- verify access token --//
+        console.log("check access token ...")
+        verifyToken(setting.tokenAccess, function(resp) {
+
+            //-- access token is valid --//
+            if(resp){
+                if(cb) cb(true)
+                return true
+            }
+            else{
+                //-- verify referesh token --//
+                console.log("check referesh token ...")
+                verifyToken(setting.tokenRefresh, function(resp) {
+                    if(!resp){
+                        if(cb) cb(false)
+                        return false
+                    }
+                    else{
+
+                        console.log("try to refresh access token")
+                        //-- referesh token --//
+                        refereshToken(function(resp) {
+
+                            //                            console.log("resp referesh access Token status: = " + resp)
+
+                            //-- access token refereshed --//
+                            if(resp){
+                                if(cb) cb(true)
+                                return true
+                            }
+                            else{
+
+                                console.log("new access token was not refreshed")
+                                if(cb) cb(false)
+
+                                return false
+                            }
+
+                        })
+                    }
+                })
+            }
+        })
+
+
+    }
+
 }
