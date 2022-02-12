@@ -384,8 +384,13 @@ ApplicationWindow{
                                         cursorShape: Qt.PointingHandCursor
 
                                         onClicked: {
-                                            spinner.visible = true
-                                            MainPython.makeLicenseKey(timeLimit)
+                                            if (parseInt(email.length) > 0){
+                                                spinner.visible = true
+                                                MainPython.makeLicenseKey(timeLimit)
+                                            }else{
+                                                alarmSignupWin.msg = "Enter your Email"
+                                                spinner.visible = false
+                                            }
                                         }
                                     }
                                 }
@@ -416,7 +421,7 @@ ApplicationWindow{
                                 //-- spacer --//
                                 Item{Layout.preferredHeight: 15}
 
-                                //-- "Purchase License" text --//
+                                //-- "Enter key" text --//
                                 Label{
                                     Layout.fillWidth: true
                                     Layout.preferredHeight: implicitHeight

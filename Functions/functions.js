@@ -1818,7 +1818,6 @@ function remainingLicenseTime(expiredTime){
     var remainTime = expiredTime.split("/")
     if (remainTime[1] < 10) remainTime[1] = "0" + remainTime[1]
     if (remainTime[2] < 10) remainTime[2] = "0" + remainTime[2]
-    print(remainTime[0]+"/"+remainTime[1]+"/"+remainTime[2])
     var timeStart = new Date(remainTime[0]+"/"+remainTime[1]+"/"+remainTime[2]);
     var today = new Date();
 

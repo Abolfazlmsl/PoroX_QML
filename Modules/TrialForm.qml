@@ -282,8 +282,13 @@ ApplicationWindow{
                                         cursorShape: Qt.PointingHandCursor
 
                                         onClicked: {
-                                            spinner.visible = true
-                                            MainPython.makeTrialData(15, setting.tokenAccess)
+                                            if (parseInt(email.length) > 0){
+                                                spinner.visible = true
+                                                MainPython.makeTrialData(15, setting.tokenAccess)
+                                            }else{
+                                                alarmSignupWin.msg = "Enter your Email"
+                                                spinner.visible = false
+                                            }
                                         }
                                     }
                                 }
@@ -360,20 +365,6 @@ ApplicationWindow{
 
 
     }
-
-    //    Alarm_Popup{
-    //        id: alarm_popup
-
-    //        x: (root_register.width / 2) - (width / 2)
-    //        y: (root_register.height / 2) - (height / 2)
-
-    //        onOk_Click: {
-
-    //            alarm_popup.close()
-    //            if(alarm_popup.closeMode)
-    //                root_register.close()
-    //        }
-    //    }
 
     //-- Alarm --//
     Rectangle{

@@ -957,33 +957,39 @@ Window {
                 color: "transparent"
             }
 
-            Rectangle{
+            Item{
                 Layout.preferredWidth: parent.width * 0.1
                 Layout.fillHeight: true
-                color: "transparent"
-                ColumnLayout{
+                Rectangle{
+                    id: licenseRec
                     anchors.fill: parent
+                    color: "transparent"
                     visible: (setting.licenseTime === "") ? false:true
-                    Label{
-                        id: licenseTimeText
-                        width: parent.width
-                        height: parent.height / 2
-                        text: "License validity: " + setting.licenseTime
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9
-                        verticalAlignment: Qt.AlignVCenter
-                        color: "green"
-                    }
-                    Label{
-                        id: licenseTypeText
-                        width: parent.width
-                        height: parent.height / 2
-                        text: "License type: " + setting.licenseType
-                        font.pixelSize: Qt.application.font.pixelSize * 0.9
-                        verticalAlignment: Qt.AlignVCenter
-                        color: "green"
+                    ColumnLayout{
+                        id: licenseLay
+                        anchors.fill: parent
+                        Label{
+                            id: licenseTimeText
+                            width: parent.width
+                            height: parent.height / 2
+                            text: "License validity: " + setting.licenseTime
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9
+                            verticalAlignment: Qt.AlignVCenter
+                            color: "green"
+                        }
+                        Label{
+                            id: licenseTypeText
+                            width: parent.width
+                            height: parent.height / 2
+                            text: "License type: " + setting.licenseType
+                            font.pixelSize: Qt.application.font.pixelSize * 0.9
+                            verticalAlignment: Qt.AlignVCenter
+                            color: "green"
+                        }
                     }
                     MouseArea{
                         anchors.fill: parent
+                        hoverEnabled: true
                         onEntered: {
                             cursorShape = Qt.PointingHandCursor
                         }

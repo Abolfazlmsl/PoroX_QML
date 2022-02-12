@@ -141,13 +141,13 @@ ApplicationWindow{
     }
 
     property alias alarmLogin: alarmLoginWin
-    property alias user: input_UserName.inputText
+    property alias user: input_License.inputText
 
     //-- when open LoginPage inputs most be Empty --//
     signal resetForm()
     onResetForm: {
-        input_UserName.inputText.text = ""
-        input_UserName.inputText.forceActiveFocus()
+        input_License.inputText.text = ""
+        input_License.inputText.forceActiveFocus()
     }
 
     visible: true//false//
@@ -294,7 +294,7 @@ ApplicationWindow{
 
                         //-- License key --//
                         M_inputText{
-                            id: input_UserName
+                            id: input_License
                             label: "License key"
                             icon: Icons.key
                             placeholder: "License Key"
@@ -325,8 +325,13 @@ ApplicationWindow{
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
-                                    spinner.visible = true
-                                    MainPython.enterLicense()
+                                    if (parseInt(input_License.inputText.length) > 0){
+                                        spinner.visible = true
+                                        MainPython.enterLicense()
+                                    }else{
+                                        alarmSignupWin.msg = "Enter the license key"
+                                        spinner.visible = false
+                                    }
                                 }
                             }
                         }
