@@ -1,11 +1,12 @@
 .pragma library
 
 var BASE = 'http://127.0.0.1:8000'
+//var BASE = 'http://poroxdrp.ir'
 
 
 //-- api urls --//
-var url_license = 'license/license/'
-var url_device = 'license/device/'
+var url_license = '/license/license/'
+var url_device = '/license/device/'
 var url_token = 'api/token/'
 
 function get_all(endpoint, cb) {
@@ -25,6 +26,10 @@ function refresh(token, endpoint, entry, cb) {
 }
 
 function verify( endpoint, entry, cb) {
+    request(null, 'POST', endpoint, entry, cb)
+}
+
+function logIn(endpoint, entry, cb) {
     request(null, 'POST', endpoint, entry, cb)
 }
 

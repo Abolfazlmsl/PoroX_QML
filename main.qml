@@ -3917,6 +3917,7 @@ Window {
                 //                alarmLogin.msg = resp.detail.toString()
 
                 //-- refresh token --//
+
                 setting.tokenAccess = resp.access
                 console.log("new access token refreshed")
                 if(cb) cb(true)
@@ -3979,11 +3980,11 @@ Window {
                 console.log("check referesh token ...")
                 verifyToken(setting.tokenRefresh, function(resp) {
                     if(!resp){
+                        getNewToken()
                         if(cb) cb(false)
                         return false
                     }
                     else{
-
                         console.log("try to refresh access token")
                         //-- referesh token --//
                         refereshToken(function(resp) {
@@ -4008,8 +4009,18 @@ Window {
                 })
             }
         })
-
-
     }
 
+    function getNewToken(){
+        var data = {
+            'phone_number': hostPhoneNumber,
+            'password': hostPassword
+        }
+
+        Service.logIn( Service.url_token, data, function(resp, http) {
+            print("Get new token")
+            setting.tokenAccess = resp.access
+            setting.tokenRefresh = resp.refresh
+        })
+    }
 }

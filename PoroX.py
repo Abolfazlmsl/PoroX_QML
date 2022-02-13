@@ -56,6 +56,8 @@ from email.mime.text import MIMEText
 import smtplib
 import ssl
 
+import webbrowser
+
 application_path = (
     sys._MEIPASS
     if getattr(sys, "frozen", False)
@@ -105,8 +107,6 @@ class Main(QObject):
         self.phase_def = None
 
         self.project = {}
-        
-        self.Base = "http://127.0.0.1:8000/"
 
         self.threadpool = QThreadPool()
         self.threadpool.setMaxThreadCount(10)
@@ -114,7 +114,7 @@ class Main(QObject):
     macData = Signal(str)
     device_id = Signal(int)
     trialData = Signal(int, list, str, bool)
-    timeLimitData = Signal(str)
+#    timeLimitData = Signal(str)
     newFile = Signal()
     saveFile = Signal()
     openFile = Signal(str, float, float, float, float, float, list, list, list, list, str, int,
@@ -168,10 +168,10 @@ class Main(QObject):
         mac = self.getMacAddress()
         self.macData.emit(mac)
 
-    @Slot(int, str)
-    def makeTrialData(self, time, token):
+    @Slot(int, str, str, str, str)
+    def makeTrialData(self, time, token, base, urlLicense, urlDevice):
         mac = self.getMacAddress()
-        device_id, keyData = self.postDevice(mac, token)
+        device_id, keyData = self.postDevice(mac, token, base, urlLicense, urlDevice)
         date = self.getExpiredDate(time)
 
         if (mac == "00:00:00:00:00:00"):
@@ -181,10 +181,9 @@ class Main(QObject):
 
         self.trialData.emit(device_id, keyData, date, vpn)
 
-    @Slot(int)
-    def makeLicenseKey(self, time):
-        date = self.getExpiredDate(time)
-        self.timeLimitData.emit(date)  
+    @Slot(str)
+    def makeLicenseKey(self, link):
+        webbrowser.open(link)
         
     def getMacAddress(self):
         mac = gma()
@@ -194,26 +193,28 @@ class Main(QObject):
         date = datetime.datetime.now() + datetime.timedelta(time)
         return date.strftime('%Y-%m-%d')
 
-    def postDevice(self, mac, myToken):
+    def postDevice(self, mac, myToken, Base, urlLicense, urlDevice):
         headers = {
             'accept': 'application/json',
             'Authorization': 'Bearer '+ myToken,
         }
-        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac}, headers=headers)
-        l = requests.get(self.Base+"license/license/", headers=headers)
+        r = requests.post(Base+urlDevice, json={"deviceMac": mac}, headers=headers)
+        l = requests.get(Base+urlLicense, headers=headers)
+
+        print(r.json())
 
         try:
             return r.json()['id'], l.json()
         except:
             return -1, []
 
-    @Slot(str, str)
-    def postDeviceSlot(self, mac, myToken):
+    @Slot(str, str, str, str)
+    def postDeviceSlot(self, mac, myToken, Base, urlDevice):
         headers = {
             'accept': 'application/json',
             'Authorization': 'Bearer '+ myToken,
         }
-        r = requests.post(self.Base+"license/device/", json={"deviceMac": mac}, headers=headers)
+        r = requests.post(Base+urlDevice, json={"deviceMac": mac}, headers=headers)
         self.device_id.emit(r.json()['id'])
      
     @Slot(str, str, str, str)

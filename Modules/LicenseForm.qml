@@ -62,7 +62,7 @@ ApplicationWindow{
                         Service.get_with_token(setting.tokenAccess, Service.url_device , function(data2, http2){
                             if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
                                 licenseData = data[i]
-                                MainPython.postDeviceSlot(mac, setting.tokenAccess)
+                                MainPython.postDeviceSlot(mac, setting.tokenAccess, Service.BASE, Service.url_device)
                                 setting.isLicensed = true
                                 var licenseTime = data[i].expired_on
                                 licenseTime = licenseTime.replace("-","/")
@@ -263,163 +263,279 @@ ApplicationWindow{
 
                 Rectangle{
                     anchors.fill: parent
-                    anchors.topMargin: parent.height * 0.1
-                    anchors.bottomMargin: parent.height * 0.1
-                    anchors.leftMargin: parent.width * 0.1
-                    anchors.rightMargin: parent.width * 0.15
+//                    anchors.topMargin: parent.height * 0.1
+//                    anchors.bottomMargin: parent.height * 0.1
+//                    anchors.leftMargin: parent.width * 0.1
+//                    anchors.rightMargin: parent.width * 0.15
                     color: "#00ffFF00"
-
-
                     ColumnLayout{
                         anchors.fill: parent
-                        //                        visible: false
+                    //-- footer of left layout--//
+                    TabBar {
+                        id: bar
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: implicitHeight
 
-                        //-- filler --//
-                        Item{Layout.fillHeight: true}
+                        font.pixelSize: Qt.application.font.pixelSize
+                        Material.accent: "#6c88b7"
 
-                        //-- "Enter the PoroX License Key --//
-                        Label{
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: implicitHeight
-                            text: "Enter the License Key"
-                            color: "darkblue"
+                        currentIndex: 0
 
-                            font.pixelSize: Qt.application.font.pixelSize * 1.3
-                            horizontalAlignment: Qt.AlignHCenter
+                        //-- enter license Button --//
+                        TabButton {
+                            id: section1
 
-                        }
-
-                        //-- spacer --//
-                        Item{Layout.preferredHeight: 15}
-
-                        //-- License key --//
-                        M_inputText{
-                            id: input_License
-                            label: "License key"
-                            icon: Icons.key
-                            placeholder: "License Key"
-
-                        }
-
-                        //-- spacer --//
-                        Item{Layout.preferredHeight: 10 }
-
-                        //-- Button continue --//
-                        Rectangle{
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 38
-
-                            radius: height / 2
-
-                            color: "darkblue"
-
+                            signal checkSection1()
+                            onCheckSection1: {
+                                checked = true
+                            }
 
                             Label{
+                                text: "Enter license"
+                                font.bold: section1.checked ? true : false
+                                font.pixelSize: section1.checked ? Qt.application.font.pixelSize * 1.1 : Qt.application.font.pixelSize
+                                color: section1.checked ? "#000000" : "#aaaaaa"
                                 anchors.centerIn: parent
-                                text: "Continue"
-                                font.pixelSize: Qt.application.font.pixelSize * 1.5
-                                color: "#ffffff"
                             }
 
-                            MouseArea{
+                            onClicked: {
+                                checkSection1()
+                            }
+                        }
+
+                        //-- trial Button --//
+                        TabButton {
+                            id: section2
+
+                            signal checkSection2()
+                            onCheckSection2: {
+                                checked = true
+                            }
+
+                            Label{
+                                text: "Try trial"
+                                font.bold: section2.checked ? true : false
+                                font.pixelSize: section2.checked ? Qt.application.font.pixelSize * 1.1 : Qt.application.font.pixelSize
+                                color: section2.checked ? "#000000" : "#aaaaaa"
+                                anchors.centerIn: parent
+                            }
+
+                            onClicked: {
+                                checkSection2()
+                            }
+
+                        }
+
+                        //-- purchase Button --//
+                        TabButton {
+                            id: section3
+
+                            signal checkSection3()
+                            onCheckSection3: {
+                                checked = true
+                            }
+
+                            Label{
+                                text: "Purchase"
+                                font.bold: section3.checked ? true : false
+                                font.pixelSize: section3.checked ? Qt.application.font.pixelSize * 1.1 : Qt.application.font.pixelSize
+                                color: section3.checked ? "#000000" : "#aaaaaa"
+                                anchors.centerIn: parent
+                            }
+
+                            onClicked: {
+                                checkSection3()
+                            }
+
+                        }
+
+                    }
+
+                    SwipeView{
+                        id: licenseView
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        interactive: false
+                        clip: true
+                        currentIndex: bar.currentIndex
+
+                        Item{
+                            id: enterLicense
+                            visible: section1.checked
+                            ColumnLayout{
                                 anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    if (parseInt(input_License.inputText.length) > 0){
-                                        spinner.visible = true
-                                        MainPython.enterLicense()
-                                    }else{
-                                        alarmSignupWin.msg = "Enter the license key"
-                                        spinner.visible = false
+                                anchors.leftMargin: parent.width * 0.1
+                                anchors.rightMargin: parent.width * 0.15
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 50}
+
+                                //-- "Enter the PoroX License Key --//
+                                Label{
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                    text: "Enter the License Key"
+                                    color: "darkblue"
+
+                                    font.pixelSize: Qt.application.font.pixelSize * 1.3
+                                    horizontalAlignment: Qt.AlignHCenter
+
+                                }
+
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 15}
+
+                                //-- License key --//
+                                M_inputText{
+                                    id: input_License
+                                    label: "License key"
+                                    icon: Icons.key
+                                    placeholder: "License Key"
+
+                                }
+
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 10 }
+
+                                //-- Button continue --//
+                                Rectangle{
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: 38
+
+                                    radius: height / 2
+
+                                    color: "darkblue"
+
+
+                                    Label{
+                                        anchors.centerIn: parent
+                                        text: "Continue"
+                                        font.pixelSize: Qt.application.font.pixelSize * 1.5
+                                        color: "#ffffff"
+                                    }
+
+                                    MouseArea{
+                                        anchors.fill: parent
+                                        cursorShape: Qt.PointingHandCursor
+                                        onClicked: {
+                                            if (parseInt(input_License.inputText.length) > 0){
+                                                spinner.visible = true
+                                                MainPython.enterLicense()
+                                            }else{
+                                                alarmSignupWin.msg = "Enter the license key"
+                                                spinner.visible = false
+                                            }
+                                        }
                                     }
                                 }
+
+                                //-- spacer --//
+                                Item{Layout.preferredHeight: 15 }
+
+                                LoadingSpinner{
+                                    id: spinner
+                                    visible: false
+                                    Layout.fillWidth: true
+                                    Layout.preferredHeight: implicitHeight
+                                }
+
+                                //-- filler --//
+                                Item{Layout.fillHeight: true}
                             }
-                        }
+                            //-- Alarm --//
+                            Rectangle{
+                                id: alarmLoginWin
 
-                        //-- spacer --//
-                        Item{Layout.preferredHeight: 15}
+                                property string msg: ""
 
-                        //-- "Try Trial" text --//
-                        Label{
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: implicitHeight
-                            text: "Try Trial"
-                            color: "darkblue"
+                                width: parent.width
+                                height: lblAlarm.implicitHeight * 2.5
+                                anchors.bottom: parent.bottom
 
-                            font.pixelSize: Qt.application.font.pixelSize * 1
-                            horizontalAlignment: Qt.AlignHCenter
+                                color: msg === "" ? "transparent" : "#E91E63"
 
-                            MouseArea{
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    showTrial()
+                                Label{
+                                    id: lblAlarm
+                                    text: alarmLogin.msg
+                                    anchors.centerIn: parent
+                                    color: "white"
                                 }
                             }
-
                         }
-
-                        //-- spacer --//
-                        Item{Layout.preferredHeight: 15}
-
-                        //-- "Purchase License" text --//
-                        Label{
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: implicitHeight
-                            text: "Purchase License"
-                            color: "darkblue"
-
-                            font.pixelSize: Qt.application.font.pixelSize * 1
-                            horizontalAlignment: Qt.AlignHCenter
-
-                            MouseArea{
+                        Item{
+                            id: trialForm
+                            visible: section2.checked
+                            TrialForm{
                                 anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked: {
-                                    showPurchase()
+                                anchors.leftMargin: parent.width * 0.1
+                                anchors.rightMargin: parent.width * 0.15
+                                onGetMessage: {
+                                    alarmTrialWin.msg = signalmsg
+                                }
+
+                                onTrialFinished: {
+                                    root_auth.visible = false
                                 }
                             }
+                            //-- Alarm --//
+                            Rectangle{
+                                id: alarmTrialWin
 
+                                property string msg: ""
+
+                                width: parent.width
+                                height: lblAlarm2.implicitHeight * 2.5
+                                anchors.bottom: parent.bottom
+
+                                color: msg === "" ? "transparent" : "#E91E63"
+
+                                Label{
+                                    id: lblAlarm2
+                                    text: alarmTrialWin.msg
+                                    anchors.centerIn: parent
+                                    color: "white"
+
+                                }
+                            }
                         }
 
-                        //-- spacer --//
-                        Item{Layout.preferredHeight: 15}
+                        Item{
+                            id: purchaseForm
+                            visible: section3.checked
+                            PurchaseLicenseForm{
+                                anchors.fill: parent
+                                anchors.leftMargin: parent.width * 0.1
+                                anchors.rightMargin: parent.width * 0.15
+                                onGetMessage: {
+                                    alarmSignupWin.msg = signalmsg
+                                }
+                            }
+                            //-- Alarm --//
+                            Rectangle{
+                                id: alarmSignupWin
 
-                        LoadingSpinner{
-                            id: spinner
-                            visible: false
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: implicitHeight
+                                property string msg: ""
+
+                                width: parent.width
+                                height: lblAlarm3.implicitHeight * 2.5
+                                anchors.bottom: parent.bottom
+
+                                color: msg === "" ? "transparent" : "#E91E63"
+
+                                Label{
+                                    id: lblAlarm3
+                                    text: alarmSignupWin.msg
+                                    anchors.centerIn: parent
+                                    color: "white"
+
+                                }
+                            }
                         }
-
-                        //-- filler --//
-                        Item{Layout.fillHeight: true}
                     }
+                }
                 }
             }
         }
 
-    }
-
-
-    //-- Alarm --//
-    Rectangle{
-        id: alarmLoginWin
-
-        property string msg: ""
-
-        width: parent.width
-        height: lblAlarm.implicitHeight * 2.5
-        anchors.bottom: parent.bottom
-
-        color: msg === "" ? "transparent" : "#E91E63"
-
-        Label{
-            id: lblAlarm
-            text: alarmLogin.msg
-            anchors.centerIn: parent
-            color: "white"
-        }
     }
 
 }
