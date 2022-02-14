@@ -1827,9 +1827,14 @@ function remainingLicenseTime(expiredTime){
 
     var date_diff = new Date( milisec_diff );
 
-    if (days <= 10){
+    if (days > 0 && days <= 10){
         warningPop.bodyText_Dialog = "Remaining license time: " + days + " days"
         warningPop.visible = true
+    }else if(days < 0){
+        setting.isLicensed = false
+        setting.licenseEmail = ""
+        setting.licenseTime = ""
+        setting.licenseType = ""
     }
 
     //        print(days + " Days "+ date_diff.getHours() + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds")
