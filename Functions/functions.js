@@ -1816,8 +1816,8 @@ function checkprops(){
 
 function remainingLicenseTime(expiredTime){
     var remainTime = expiredTime.split("/")
-    if (remainTime[1] < 10) remainTime[1] = "0" + remainTime[1]
-    if (remainTime[2] < 10) remainTime[2] = "0" + remainTime[2]
+//    if (remainTime[1] < 10) remainTime[1] = "0" + remainTime[1]
+//    if (remainTime[2] < 10) remainTime[2] = "0" + remainTime[2]
     var timeStart = new Date(remainTime[0]+"/"+remainTime[1]+"/"+remainTime[2]);
     var today = new Date();
 
@@ -1826,8 +1826,7 @@ function remainingLicenseTime(expiredTime){
     var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24));
 
     var date_diff = new Date( milisec_diff );
-
-    if (days > 0 && days <= 10){
+    if (days >= 0 && days <= 10){
         warningPop.bodyText_Dialog = "Remaining license time: " + days + " days"
         warningPop.visible = true
     }else if(days < 0){
@@ -1835,6 +1834,7 @@ function remainingLicenseTime(expiredTime){
         setting.licenseEmail = ""
         setting.licenseTime = ""
         setting.licenseType = ""
+        licenseform.visible = true
     }
 
     //        print(days + " Days "+ date_diff.getHours() + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds")
