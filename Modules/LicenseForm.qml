@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.0
 
 import "./../Fonts/Icon.js" as Icons
 import "./../REST/apiService.js" as Service
+import "./../Functions/functions.js" as Functions
 
 ApplicationWindow{
     id: root_auth
@@ -59,6 +60,12 @@ ApplicationWindow{
 
                 for (var i = 0; i < data.length; i++){
                     if (data[i].key === user.text){
+                        if (Functions.isLicenseExpired(data[i])){
+                            alarmLoginWin.msg = "The license has been expired"
+                            spinner.visible = false
+                            return
+                        }
+
                         Service.get_with_token(setting.tokenAccess, Service.url_device , function(data2, http2){
                             if (data[i].deviceNumber > data[i].devices.length && !isMacExist(data2, mac)){
                                 licenseData = data[i]

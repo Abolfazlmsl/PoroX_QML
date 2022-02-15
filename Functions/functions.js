@@ -1839,3 +1839,14 @@ function remainingLicenseTime(expiredTime){
 
     //        print(days + " Days "+ date_diff.getHours() + " Hours " + date_diff.getMinutes() + " Minutes " + date_diff.getSeconds() + " Seconds")
 }
+
+function isLicenseExpired(data){
+    var remainTime = data.expired_on.split("-")
+    var timeStart = new Date(remainTime[0]+"/"+remainTime[1]+"/"+remainTime[2]);
+    var today = new Date();
+    var milisec_diff = timeStart - today;
+
+    var days = Math.floor(milisec_diff / 1000 / 60 / (60 * 24))
+    if (days>=0) return false
+    else return true
+}

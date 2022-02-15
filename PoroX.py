@@ -201,8 +201,6 @@ class Main(QObject):
         r = requests.post(Base+urlDevice, json={"deviceMac": mac}, headers=headers)
         l = requests.get(Base+urlLicense, headers=headers)
 
-        print(r.json())
-
         try:
             return r.json()['id'], l.json()
         except:
