@@ -224,8 +224,8 @@ class Main(QObject):
     def sendEmail_th(self, message, email, key, serial):
         msg = MIMEMultipart()
 
-        password = "3@#abmsl@"
-        msg['From'] = "poroxsoftware@gmail.com"
+        password = "Porox@Sharif1" #"3@#abmsl@"
+        msg['From'] = "reza.shams@digitalrockphysics.ir" #"poroxsoftware@gmail.com"
         msg['To'] = email
         msg['Subject'] = "PoroX license"
 
@@ -233,7 +233,8 @@ class Main(QObject):
         msg.attach( MIMEText(message, 'plain') )
 
         context = ssl.create_default_context()
-        server = smtplib.SMTP_SSL(host='smtp.gmail.com', port=465, context=context)
+        server = smtplib.SMTP_SSL(host='mail.digitalrockphysics.ir', port=465, context=context)
+        #server = smtplib.SMTP_SSL(host='smtp.gmail.com', port=465, context=context)
         #server.starttls()
 
         server.login(msg['From'], password)
