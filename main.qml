@@ -32,12 +32,29 @@ Window {
         id: setting
 
         //license properties
+        property string licenseKey: ""
         property bool isLicensed: false
         property string licenseEmail: ""
         property string licenseTime: ""
         property string licenseType: ""
         property string tokenAccess: ""
         property string tokenRefresh: ""
+    }
+
+    signal resetSetting()
+    onResetSetting: {
+        setting.licenseKey = ""
+        setting.isLicensed = false
+        setting.licenseEmail = ""
+        setting.licenseTime = ""
+        setting.licenseType = ""
+        setting.tokenAccess = ""
+        setting.tokenRefresh = ""
+    }
+
+    signal initialCheck()
+    onInitialCheck: {
+        checkToken(function(resp){})
     }
 
     signal showLogin()
@@ -71,11 +88,7 @@ Window {
         MainPython.openFile.connect(getOpenfile)
         MainPython.saveFile.connect(getSaveFileSignal)
         MainPython.newFile.connect(getNewFileSignal)
-        if (setting.isLicensed){
-            Functions.remainingLicenseTime(setting.licenseTime)
-        }
-
-        checkToken(function(resp){})
+        initialCheck()
     }
 
     signal getNewFileSignal()
@@ -3779,7 +3792,34 @@ Window {
         x: (main1.width / 2) - (width / 2) - 10
         y: (main1.height / 2) - (height / 2) - 30
         onAccept: {
+            if (warningPop.internetConnection){
+                initialCheck()
+                internetConnection = false
+            }
+
+            if (warningPop.invalidLicense){
+                licenseform.visible = true
+                invalidLicense = false
+            }
             warningPop.visible = false
+        }
+    }
+
+    Warning_Popup{
+        id: specialwarningPop
+        visible: false
+        closePolicy: Popup.NoAutoClose
+        width: 350 * ratio * sizeRatio
+        height: 181 * ratio * sizeRatio
+
+        x: (main1.width / 2) - (width / 2) - 10
+        y: (main1.height / 2) - (height / 2) - 30
+        onAccept: {
+            if (specialwarningPop.internetConnection){
+                initialCheck()
+                internetConnection = false
+            }
+            specialwarningPop.visible = false
         }
     }
 
@@ -3972,6 +4012,7 @@ Window {
 
             //-- access token is valid --//
             if(resp){
+                checkLicense()
                 if(cb) cb(true)
                 return true
             }
@@ -3981,6 +4022,7 @@ Window {
                 verifyToken(setting.tokenRefresh, function(resp) {
                     if(!resp){
                         getNewToken()
+                        checkLicense()
                         if(cb) cb(false)
                         return false
                     }
@@ -3993,6 +4035,7 @@ Window {
 
                             //-- access token refereshed --//
                             if(resp){
+                                checkLicense()
                                 if(cb) cb(true)
                                 return true
                             }
@@ -4019,8 +4062,52 @@ Window {
 
         Service.logIn( Service.url_token, data, function(resp, http) {
             print("Get new token")
+            //-- 401- Unauthorized --//
+            if(http.status === 0){
+                // No internet connection
+                licenseform.visible = false
+                specialwarningPop.bodyText_Dialog = "No internet connection"
+                specialwarningPop.internetConnection = true
+                specialwarningPop.visible = true
+                if(cb) cb(false)
+                return
+            }
             setting.tokenAccess = resp.access
             setting.tokenRefresh = resp.refresh
+        })
+    }
+
+    function checkLicense(){
+        if (setting.isLicensed){
+            checkActiveLicense(setting.licenseTime, setting.licenseKey)
+        }else{
+            licenseform.visible = true
+        }
+    }
+
+    function checkActiveLicense(time, key){
+        Service.get_with_token(setting.tokenAccess, Service.url_license , function(data, http){
+            //-- check ERROR --//
+            if(data.hasOwnProperty('error')) // chack exist error in resp
+            {
+                return
+            }
+
+            //-- 400-Bad Request, 401-Unauthorized --//
+            //-- No active account found with the given credentials --//
+            if(http.status === 400 || http.status === 401 || data.hasOwnProperty('non_field_errors')){
+
+                return
+            }
+
+            for (var i = 0; i < data.length; i++){
+                if (data[i].key === key){
+                    Functions.remainingLicenseTime(time)
+                    return
+                }
+            }
+            licenseform.visible = true
+            resetSetting()
         })
     }
 }

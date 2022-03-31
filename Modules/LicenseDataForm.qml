@@ -72,11 +72,9 @@ Item {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         onClicked: {
-                            setting.isLicensed = false
-                            setting.licenseEmail = ""
-                            setting.licenseTime = ""
-                            setting.licenseType = ""
+                            resetSetting()
                             license_Dataform.visible = false
+                            licenseform.visible = true
                         }
                     }
                 }

@@ -1,8 +1,8 @@
 .pragma library
 
-var BASE = 'http://127.0.0.1:8000'
+//var BASE = 'http://127.0.0.1:8000'
 //var BASE = 'http://porox.ir'
-
+var BASE = 'http://digitalrockphysics.ir'
 
 //-- api urls --//
 var url_license = '/license/license/'

@@ -45,7 +45,7 @@ Item{
             //-- No active account found with the given credentials --//
             if(http.status === 400 || http.status === 401 || resp.hasOwnProperty('non_field_errors')){
 
-                getMessage("Incorrect entered informations")
+                getMessage("Invalid entered informations")
                 spinner.visible = false
                 return
             }

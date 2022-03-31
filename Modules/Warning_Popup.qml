@@ -15,9 +15,9 @@ Dialog{
     topPadding: 0
 
     modal: true
-
     signal accept()
 
+    property bool internetConnection: false
     property bool isSend: true
 
     property string bodyText_Dialog: "Done"
@@ -182,6 +182,7 @@ Dialog{
                         }
 
                         onClicked: {
+
                             accept()
                         }
                     }

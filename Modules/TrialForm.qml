@@ -56,7 +56,7 @@ Item{
 
                     //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
                     //                                    alarmLogin.msg = resp.non_field_errors.toString()
-                    getMessage("Incorrect entered informations")
+                    getMessage("Invalid entered informations")
                     spinner.visible = false
                     return
                 }

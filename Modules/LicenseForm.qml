@@ -53,7 +53,7 @@ ApplicationWindow{
 
                     //                                    authWin.log("error detected; " + resp.non_field_errors.toString())
                     //                                    alarmLogin.msg = resp.non_field_errors.toString()
-                    alarmLoginWin.msg = "Incorrect license key"
+                    alarmLoginWin.msg = "Invalid license key"
                     spinner.visible = false
                     return
                 }
@@ -76,6 +76,7 @@ ApplicationWindow{
                                 setting.licenseTime = licenseTime.replace("-","/")
                                 setting.licenseType = data[i].licenseType
                                 setting.licenseEmail = data[i].email
+                                setting.licenseKey = data[i].key
                                 spinner.visible = false
                                 root_auth.visible = false
                                 successDynamicPop.messageText = "The license activated successfully"
@@ -90,6 +91,7 @@ ApplicationWindow{
                                 setting.licenseTime = licenseTime.replace("-","/")
                                 setting.licenseType = data[i].licenseType
                                 setting.licenseEmail = data[i].email
+                                setting.licenseKey = data[i].key
                                 spinner.visible = false
                                 root_auth.visible = false
                                 successDynamicPop.messageText = "The license activated successfully"
@@ -102,6 +104,7 @@ ApplicationWindow{
                                 setting.licenseTime = licenseTime.replace("-","/")
                                 setting.licenseType = data[i].licenseType
                                 setting.licenseEmail = data[i].email
+                                setting.licenseKey = data[i].key
                                 spinner.visible = false
                                 root_auth.visible = false
                                 successDynamicPop.messageText = "The license activated successfully"
