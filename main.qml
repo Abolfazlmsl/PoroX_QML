@@ -48,8 +48,6 @@ Window {
         setting.licenseEmail = ""
         setting.licenseTime = ""
         setting.licenseType = ""
-        setting.tokenAccess = ""
-        setting.tokenRefresh = ""
     }
 
     signal initialCheck()
