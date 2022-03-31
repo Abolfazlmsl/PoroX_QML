@@ -38,6 +38,7 @@ ApplicationWindow{
             spinner.visible = false
         }else{
             Service.get_with_token(setting.tokenAccess, Service.url_license , function(data, http){
+                print(data.length)
                 //-- check ERROR --//
                 if(data.hasOwnProperty('error')) // chack exist error in resp
                 {
@@ -62,6 +63,12 @@ ApplicationWindow{
                     if (data[i].key === user.text){
                         if (Functions.isLicenseExpired(data[i])){
                             alarmLoginWin.msg = "The license has been expired"
+                            spinner.visible = false
+                            return
+                        }
+
+                        if (!data[i].active){
+                            alarmLoginWin.msg = "Admin has not yet activated the license"
                             spinner.visible = false
                             return
                         }

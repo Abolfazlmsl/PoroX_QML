@@ -4112,7 +4112,7 @@ Window {
             }
 
             for (var i = 0; i < data.length; i++){
-                if (data[i].key === key){
+                if (data[i].key === key && data[i].active){
                     Functions.remainingLicenseTime(time)
                     return
                 }

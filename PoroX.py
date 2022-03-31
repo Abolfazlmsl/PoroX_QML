@@ -58,6 +58,8 @@ import ssl
 
 import webbrowser
 
+from melipayamak import Api
+
 application_path = (
     sys._MEIPASS
     if getattr(sys, "frozen", False)
@@ -114,6 +116,7 @@ class Main(QObject):
     macData = Signal(str)
     device_id = Signal(int)
     trialData = Signal(int, list, str, bool)
+    registCode = Signal(int)
 #    timeLimitData = Signal(str)
     newFile = Signal()
     saveFile = Signal()
@@ -215,13 +218,34 @@ class Main(QObject):
         r = requests.post(Base+urlDevice, json={"deviceMac": mac}, headers=headers)
         self.device_id.emit(r.json()['id'])
      
-    @Slot(str, str, str, str)
-    def sendEmail(self, message, email, key, serial):
-        worker = Mythread_function_3(self.sendEmail_th, message, email, key, serial)
+
+    @Slot(str)
+    def sendSMS(self, phone):
+        worker = Mythread_function_0(self.sendSMS_th, phone)
         self.threadpool.start(worker)
 
-    @Slot(str, str, str, str)
-    def sendEmail_th(self, message, email, key, serial):
+    @Slot(str)
+    def sendSMS_th(self, phone):
+        username = '09114113874'
+        password = '9AL5O'
+        api = Api(username, password)
+        sms = api.sms()
+        to = phone
+        _from = '50004000'
+        code = random.randint(10000, 99999)
+        text = "Thank you for installing the PoroX software.\nCode: " + str(code)
+        response = sms.send(to, _from, text)
+
+        self.registCode.emit(code)
+
+    @Slot(str, str, str, str, str, str, str, str, str)
+    def sendEmail(self, message, email, key, serial, adminurl, name, phone, education, job):
+        worker = Mythread_function_7(self.sendEmail_th, message, email, key, serial, adminurl,
+                                    name, phone, education, job)
+        self.threadpool.start(worker)
+
+    @Slot(str, str, str, str, str, str, str, str, str)
+    def sendEmail_th(self, message, email, key, serial, adminurl, name, phone, education, job):
         msg = MIMEMultipart()
 
         password = "Porox@Sharif1" #"3@#abmsl@"
@@ -240,6 +264,21 @@ class Main(QObject):
         server.login(msg['From'], password)
 
         server.sendmail(msg['From'], msg['To'], msg.as_string())
+
+        msgAdmin = MIMEMultipart()
+        adminurl = adminurl + "/admin/"
+        messageAdmin = "A new request for trial license key from:\nName: " + name +\
+                        "\nPhone number: " + phone + "\nEmail: " + email +\
+                        "\nEducation: " + education + "\nJob: " + job + "\nGo to " + adminurl + " for approval"
+        msgAdmin.attach( MIMEText(messageAdmin, 'plain') )
+
+        msgAdmin['From'] = "reza.shams@digitalrockphysics.ir"
+#        msgAdmin['ToAdmin1'] = 'rezashams70@gmail.com'
+        msgAdmin['ToAdmin2'] = 'abolfazlmoslemipoor@gmail.com'
+        msgAdmin['Subject'] = "PoroX license"
+
+#        server.sendmail(msg['From'], msgAdmin['ToAdmin1'], msgAdmin.as_string())
+        server.sendmail(msgAdmin['From'], msgAdmin['ToAdmin2'], msgAdmin.as_string())
 
         server.quit()
         
@@ -6176,6 +6215,24 @@ class Mythread_function_5(QRunnable):
 
     def run(self):
         self.fn(self.var1, self.var2, self.var3, self.var4, self.var5, self.var6, self.var7, self.var8, self.var9, self.var10)
+
+class Mythread_function_7(QRunnable):
+    def __init__(self, fn, var1, var2, var3, var4, var5, var6, var7, var8, var9):
+        super(Mythread_function_7, self).__init__()
+        self.fn = fn
+        self.var1 = var1
+        self.var2 = var2
+        self.var3 = var3
+        self.var4 = var4
+        self.var5 = var5
+        self.var6 = var6
+        self.var7 = var7
+        self.var8 = var8
+        self.var9 = var9
+
+    def run(self):
+        self.fn(self.var1, self.var2, self.var3, self.var4, self.var5, self.var6, self.var7, self.var8, self.var9)
+
 
 class Mythread_function_simulation(QRunnable):
     def __init__(self, fn, var1, var2, var3, var4, var5, var6, var7, var8, var9,
