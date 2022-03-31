@@ -559,6 +559,7 @@ Rectangle{
                 TabButton {
                     id: testSection3
                     rotation: 180
+                    enabled: setting.isLicensed
 
                     signal checkSection3()
                     onCheckSection3: {
@@ -586,6 +587,7 @@ Rectangle{
                 TabButton {
                     id: testSection2
                     rotation: 180
+                    enabled: setting.isLicensed
 
                     signal checkSection2()
                     onCheckSection2: {
@@ -612,6 +614,7 @@ Rectangle{
                 TabButton {
                     id: testSection1
                     rotation: 180
+                    enabled: setting.isLicensed
 
                     signal checkSection1()
                     onCheckSection1: {

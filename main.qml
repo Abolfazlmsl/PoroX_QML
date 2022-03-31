@@ -826,6 +826,7 @@ Window {
                     Layout.preferredHeight: 35 * ratio
 
                     text: "Input"
+                    enabled: setting.isLicensed
 
                     onBtnClicked: {
                         colorstate = !colorstate
@@ -849,6 +850,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 35 * ratio
                     text: "Image handling"
+                    enabled: setting.isLicensed
 
                     onBtnClicked: {
                         colorstate = !colorstate
@@ -872,6 +874,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 35 * ratio
                     text: "Reconstruction"
+                    enabled: setting.isLicensed
 
                     onBtnClicked: {
                         colorstate = !colorstate
@@ -895,6 +898,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 35 * ratio
                     text: "Network"
+                    enabled: setting.isLicensed
 
                     onBtnClicked: {
                         colorstate = !colorstate
@@ -919,6 +923,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 35 * ratio
                     text: "Properties"
+                    enabled: setting.isLicensed
 
                     onBtnClicked: {
                         colorstate = !colorstate
@@ -944,6 +949,7 @@ Window {
                     Layout.fillWidth: true
                     Layout.preferredHeight: 35 * ratio
                     text: "Simulation"
+                    enabled: setting.isLicensed
 
                     onBtnClicked: {
                         colorstate = !colorstate
@@ -1074,6 +1080,7 @@ Window {
             id: open_list
             Layout.fillHeight: true
             Layout.preferredWidth: 20
+            enabled: setting.isLicensed
             palette {
                 button: "#808080"
             }
@@ -2137,6 +2144,7 @@ Window {
                         TabButton {
                             id: section2
                             rotation: 180
+                            enabled: setting.isLicensed
 
                             signal checkSection2()
                             onCheckSection2: {
@@ -2161,6 +2169,7 @@ Window {
                         TabButton {
                             id: section1
                             rotation: 180
+                            enabled: setting.isLicensed
 
                             signal checkSection1()
                             onCheckSection1: {
@@ -2819,6 +2828,7 @@ Window {
                                 width: 25
                                 height: width
                                 radius: width/2
+                                visible: setting.isLicensed
                                 color: "transparent"
                                 Label{
                                     id:texttxt
@@ -2876,6 +2886,7 @@ Window {
                                 width: 25
                                 height: width
                                 radius: width/2
+                                visible: setting.isLicensed
                                 color: "transparent"
                                 Label{
                                     id:bctxt
@@ -2935,6 +2946,7 @@ Window {
                                 width: 25
                                 height: width
                                 radius: width/2
+                                visible: setting.isLicensed
                                 color: "transparent"
                                 Label{
                                     id:capturetxt
@@ -3287,6 +3299,7 @@ Window {
             id: open_result
             Layout.fillHeight: true
             Layout.preferredWidth: 20
+            enabled: setting.isLicensed
             palette {
                 button: "#808080"
             }
