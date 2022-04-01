@@ -253,7 +253,7 @@ class Main(QObject):
         msg['To'] = email
         msg['Subject'] = "PoroX license"
 
-        message = message + "\nYour license key: " + key + "\nYour serial number: " + serial
+        message = message + "\nYour license key: " + key + "\nYour serial number: " + serial + "\nAfter reviewing your information, the admin will activate your license."
         msg.attach( MIMEText(message, 'plain') )
 
         context = ssl.create_default_context()
