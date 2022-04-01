@@ -71,7 +71,7 @@ Item{
                     return
                 }
                 var msg = "Thank you for installing the PoroX software"
-                MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber, Service.BASE_secure,
+                MainPython.sendEmail(msg, email.text, resp.key, resp.serialNumber, Service.BASE,
                                      name.text, phone.text, education.text, job.text)
                 spinner.visible = false
                 swipe_register.currentIndex = 0
