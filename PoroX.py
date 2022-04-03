@@ -229,12 +229,19 @@ class Main(QObject):
         username = '09114113874'
         password = '9AL5O'
         api = Api(username, password)
-        sms = api.sms()
+        # sms = api.sms()
+        # to = phone
+        # _from = '50004000'
+        # code = random.randint(10000, 99999)
+        # text = "Thank you for installing the PoroX software.\nCode: " + str(code)
+        # response = sms.send(to, _from, text)
+        
+        sms_soap = api.sms('soap')
         to = phone
-        _from = '50004000'
+        bodyId = 81109
         code = random.randint(10000, 99999)
-        text = "Thank you for installing the PoroX software.\nCode: " + str(code)
-        response = sms.send(to, _from, text)
+        text = [str(code)]
+        sms_soap.send_by_base_number(text, to, bodyId)
 
         self.registCode.emit(code)
 
@@ -273,11 +280,11 @@ class Main(QObject):
         msgAdmin.attach( MIMEText(messageAdmin, 'plain') )
 
         msgAdmin['From'] = "reza.shams@digitalrockphysics.ir"
-#        msgAdmin['ToAdmin1'] = 'rezashams70@gmail.com'
+        msgAdmin['ToAdmin1'] = 'rezashams70@gmail.com'
         msgAdmin['ToAdmin2'] = 'abolfazlmoslemipoor@gmail.com'
         msgAdmin['Subject'] = "PoroX license"
 
-#        server.sendmail(msg['From'], msgAdmin['ToAdmin1'], msgAdmin.as_string())
+        server.sendmail(msgAdmin['From'], msgAdmin['ToAdmin1'], msgAdmin.as_string())
         server.sendmail(msgAdmin['From'], msgAdmin['ToAdmin2'], msgAdmin.as_string())
 
         server.quit()
