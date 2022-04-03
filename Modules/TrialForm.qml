@@ -546,7 +546,7 @@ Item{
                         visible: false
                         Layout.fillWidth: true
                         Layout.preferredHeight: implicitHeight
-                        text: "ارسال مجدد"
+                        text: "Send again"
                         color: "darkblue"
 
                         font.pixelSize: Qt.application.font.pixelSize * 1.1
