@@ -236,12 +236,12 @@ class Main(QObject):
         # text = "Thank you for installing the PoroX software.\nCode: " + str(code)
         # response = sms.send(to, _from, text)
         
-        sms_soap = api.sms('soap')
+        sms = api.sms()
         to = phone
         bodyId = 81109
         code = random.randint(10000, 99999)
         text = [str(code)]
-        sms_soap.send_by_base_number(text, to, bodyId)
+        sms.send_by_base_number(text, to, bodyId)
 
         self.registCode.emit(code)
 

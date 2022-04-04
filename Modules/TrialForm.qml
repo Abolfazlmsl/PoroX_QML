@@ -167,7 +167,7 @@ Item{
                 Label{
                     Layout.fillWidth: true
                     Layout.preferredHeight: implicitHeight
-                    text: "Activate trial license for 15 days"
+                    text: "Request trial license for 15 days"
                     color: "darkblue"
 
                     font.pixelSize: Qt.application.font.pixelSize * 1.3
