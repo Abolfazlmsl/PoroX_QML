@@ -31,6 +31,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[Dirs]
+Name: {app}; Permissions: users-full
+
 [Files]
 Source: "C:\Users\Abolfazl\Desktop\PoroX\dist\Porox.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\Abolfazl\Desktop\PoroX\mps_snesim_tree.exe"; DestDir: "{app}"; Flags: ignoreversion
